@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atchii Assistant</title>
+<style>
+:root {
+    --panel: rgba(255, 255, 255, 0.78);
+    --panel-strong: rgba(255, 255, 255, 0.94);
+    --text: #102033;
+    --muted: #5c7188;
+    --primary: #3a96e8;
+    --accent: #ffc84a;
+    --bot-accent: #4aa6f2;
+    --bot-soft: #d8efff;
+    --shadow: 0 18px 42px rgba(52, 121, 185, 0.18);
+    --line: rgba(255, 255, 255, 0.78);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 14% 12%, rgba(255,255,255,0.96), transparent 26%),
+        radial-gradient(circle at 87% 18%, rgba(255,216,236,0.72), transparent 25%),
+        linear-gradient(135deg, #def1ff 0%, #f8fbff 52%, #fff0f6 100%);
+    overflow-x: hidden;
+}
+
+button, select, input, textarea {
+    font: inherit;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+}
+
+.app-shell {
+    width: min(1180px, calc(100% - 28px));
+    margin: 18px auto 36px;
+}
+
+.page {
+    display: none;
+    padding: 26px;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.page.active {
+    display: block;
+}
+
+.hero {
+    min-height: 560px;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,0.78), rgba(222,242,255,0.64)),
+        radial-gradient(circle at 100% 100%, rgba(125, 197, 255, 0.34), transparent 34%);
+}
+
+.topbar, .bottom-actions, .page-header, .tool-row, .score-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.icon-button, .soft-button, .mic-button, .back-button {
+    min-height: 48px;
+    border-radius: 16px;
+    background: var(--panel-strong);
+    color: var(--text);
+    box-shadow: 0 10px 24px rgba(55, 116, 176, 0.13);
+}
+
+.icon-button {
+    width: 48px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+}
+
+.soft-button, .back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 150px;
+    padding: 0 18px;
+}
+
+.mic-button {
+    width: 74px;
+    height: 74px;
+    border-radius: 999px;
+    color: var(--bot-accent);
+    font-size: 34px;
+}
+
+.clock-card {
+    min-width: 190px;
+    padding: 16px 22px;
+    border-radius: 20px;
+    background: var(--panel-strong);
+    text-align: right;
+}
+
+.clock-card small {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.clock-card strong {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 34px;
+}
+
+.hero-main {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    align-items: center;
+    margin-top: 26px;
+}
+
+.greeting h1 {
+    margin: 0 0 8px;
+    font-size: clamp(36px, 5vw, 58px);
+}
+
+.greeting p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 20px;
+}
+
+.feeling-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: var(--panel-strong);
+    color: var(--primary);
+}
+
+.mascot {
+    position: relative;
+    width: 190px;
+    height: 218px;
+    margin: auto;
+    filter: drop-shadow(0 22px 22px rgba(44, 118, 185, 0.18));
+}
+
+.mascot-body {
+    position: absolute;
+    left: 33px;
+    bottom: 8px;
+    width: 122px;
+    height: 118px;
+    border-radius: 54% 54% 46% 46%;
+    background: linear-gradient(145deg, #fff 0%, var(--bot-soft) 100%);
+    box-shadow: inset -10px -14px 20px color-mix(in srgb, var(--bot-accent) 22%, transparent);
+}
+
+.mascot-head {
+    position: absolute;
+    left: 18px;
+    top: 26px;
+    width: 152px;
+    height: 112px;
+    border-radius: 52px;
+    background: linear-gradient(145deg, #fff 0%, var(--bot-soft) 88%);
+}
+
+.mascot-screen {
+    position: absolute;
+    left: 36px;
+    top: 48px;
+    width: 116px;
+    height: 72px;
+    border-radius: 29px;
+    background: #07131d;
+    box-shadow: inset 0 -8px 18px color-mix(in srgb, var(--bot-accent) 38%, transparent);
+}
+
+.eye {
+    position: absolute;
+    top: 24px;
+    width: 15px;
+    height: 22px;
+    border-radius: 99px;
+    background: var(--bot-accent);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--bot-accent) 82%, white);
+}
+
+.eye.left { left: 30px; }
+.eye.right { right: 30px; }
+
+.mouth {
+    position: absolute;
+    left: 48px;
+    top: 45px;
+    width: 22px;
+    height: 12px;
+    border-bottom: 4px solid color-mix(in srgb, var(--bot-accent) 70%, white);
+    border-radius: 0 0 99px 99px;
+}
+
+.ear {
+    position: absolute;
+    top: 64px;
+    width: 22px;
+    height: 48px;
+    border-radius: 99px;
+    background: linear-gradient(#fff, var(--bot-accent));
+}
+
+.ear.left { left: 0; }
+.ear.right { right: 0; }
+
+.antenna {
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 34px;
+    border-radius: 99px;
+    background: var(--bot-accent);
+}
+
+.antenna::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: -5px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--bot-accent) 35%, transparent);
+}
+
+.antenna.left { left: 58px; transform: rotate(-15deg); }
+.antenna.right { right: 58px; transform: rotate(15deg); }
+
+.arm {
+    position: absolute;
+    top: 122px;
+    width: 26px;
+    height: 58px;
+    border-radius: 99px;
+    background: linear-gradient(#fff, var(--bot-soft));
+}
+
+.arm.left { left: 18px; transform: rotate(28deg); }
+.arm.right { right: 18px; transform: rotate(-28deg); }
+
+.foot {
+    position: absolute;
+    bottom: 0;
+    width: 42px;
+    height: 18px;
+    border-radius: 99px;
+    background: var(--bot-accent);
+}
+
+.foot.left { left: 48px; }
+.foot.right { right: 48px; }
+
+.mascot.happy { animation: float 3s ease-in-out infinite; }
+.mascot.calm .eye { height: 5px; top: 33px; }
+.mascot.proud .mascot-screen { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 36%, transparent), inset 0 -8px 18px color-mix(in srgb, var(--bot-accent) 38%, transparent); }
+.mascot.sad .mouth { top: 54px; transform: rotate(180deg); }
+
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(120px, 1fr));
+    gap: 16px;
+    margin: 30px 0;
+}
+
+.tile, .activity-card, .emotion, .shape-card, .ai-panel, .draw-panel, .game-stage, .game-side {
+    border-radius: 20px;
+    background: var(--panel-strong);
+    box-shadow: 0 14px 25px rgba(59, 126, 181, 0.12);
+}
+
+.tile {
+    min-height: 152px;
+    padding: 18px 12px;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.tile:hover, .tile:focus-visible, .soft-button:hover, .shape-card:hover {
+    transform: translateY(-3px);
+}
+
+.tile-icon {
+    font-size: 52px;
+    line-height: 1;
+}
+
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page h2 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.card-grid, .settings-row, .emotion-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+}
+
+.activity-card {
+    min-height: 150px;
+    padding: 18px;
+    color: var(--text);
+    text-align: left;
+}
+
+.activity-card strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.activity-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.game-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.game-tabs button {
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 14px;
+    background: #e8f4ff;
+    color: #1f6cab;
+}
+
+.game-tabs button.active {
+    background: var(--bot-accent);
+    color: #fff;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 18px;
+}
+
+.game-stage {
+    min-height: 450px;
+    padding: 24px;
+    background:
+        radial-gradient(circle at 70% 20%, rgba(255,255,255,0.84), transparent 26%),
+        linear-gradient(145deg, rgba(224,244,255,0.92), rgba(255,242,249,0.9));
+}
+
+.target-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.82);
+}
+
+.target-card strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 24px;
+}
+
+.score-row {
+    justify-content: flex-start;
+    margin: 18px 0;
+}
+
+.score-row span {
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.82);
+    color: #2d6fa8;
+    font-weight: 700;
+}
+
+.shape-grid, .memory-grid, .count-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(90px, 1fr));
+    gap: 16px;
+}
+
+.shape-card {
+    min-height: 120px;
+    display: grid;
+    place-items: center;
+}
+
+.shape {
+    width: 70px;
+    height: 70px;
+    display: block;
+}
+
+.shape.circle { border-radius: 50%; }
+.shape.square { border-radius: 16px; }
+.shape.triangle {
+    width: 0;
+    height: 0;
+    background: transparent !important;
+    border-left: 42px solid transparent;
+    border-right: 42px solid transparent;
+    border-bottom: 74px solid var(--shape-color);
+}
+
+.blue { background: #4aa6f2; --shape-color: #4aa6f2; }
+.pink { background: #f28caf; --shape-color: #f28caf; }
+.green { background: #43cfa5; --shape-color: #43cfa5; }
+.yellow { background: #ffc84a; --shape-color: #ffc84a; }
+.purple { background: #a58cf0; --shape-color: #a58cf0; }
+.orange { background: #ff9952; --shape-color: #ff9952; }
+
+.memory-card {
+    min-height: 94px;
+    border-radius: 18px;
+    background: var(--bot-accent);
+    color: #fff;
+    font-size: 34px;
+    box-shadow: 0 12px 24px rgba(50, 117, 176, 0.16);
+}
+
+.memory-card.matched {
+    background: #43cfa5;
+}
+
+.count-card {
+    min-height: 105px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.86);
+    font-size: 30px;
+}
+
+.platform-wrap {
+    display: grid;
+    gap: 12px;
+}
+
+#platformCanvas {
+    width: 100%;
+    height: 430px;
+    display: block;
+    border-radius: 20px;
+    background: linear-gradient(#bfe8ff, #f7fcff 62%, #b7ecbf 62%);
+    box-shadow: inset 0 0 0 1px rgba(80, 132, 180, 0.16);
+}
+
+.math-answer {
+    display: none;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.88);
+}
+
+.math-answer.active {
+    display: grid;
+}
+
+.math-answer input {
+    min-height: 46px;
+    padding: 0 12px;
+    border: 1px solid rgba(80, 132, 180, 0.18);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.game-side {
+    padding: 20px;
+}
+
+.draw-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 18px;
+}
+
+.draw-panel {
+    padding: 18px;
+}
+
+.draw-tools {
+    display: grid;
+    gap: 12px;
+}
+
+.draw-tools label {
+    display: grid;
+    gap: 8px;
+    color: var(--muted);
+}
+
+.draw-tools input, .draw-tools select, .draw-tools button, .ai-input input, .settings-row select, .settings-row input {
+    min-height: 46px;
+    padding: 0 12px;
+    border: 1px solid rgba(80, 132, 180, 0.18);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.color-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.color-swatch {
+    width: 100%;
+    height: 42px;
+    border-radius: 14px;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.74);
+}
+
+.canvas-wrap {
+    min-height: 520px;
+    padding: 14px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.72);
+}
+
+#drawCanvas {
+    width: 100%;
+    height: 500px;
+    display: block;
+    border-radius: 18px;
+    background: #fff;
+    touch-action: none;
+    box-shadow: inset 0 0 0 1px rgba(80, 132, 180, 0.16);
+}
+
+.emotion {
+    min-height: 130px;
+    font-size: 20px;
+}
+
+.routine-list {
+    display: grid;
+    gap: 12px;
+}
+
+.routine-item {
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--panel-strong);
+}
+
+.routine-item span {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bot-accent) 16%, white);
+    color: var(--bot-accent);
+    font-weight: 700;
+}
+
+.routine-item input {
+    width: 28px;
+    height: 28px;
+}
+
+.settings-row label {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--panel-strong);
+}
+
+.ai-panel {
+    display: grid;
+    grid-template-rows: minmax(260px, 1fr) auto;
+    min-height: 420px;
+    overflow: hidden;
+}
+
+.chat-log {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 16px;
+    overflow-y: auto;
+    max-height: 390px;
+}
+
+.message {
+    max-width: 82%;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: #eef7ff;
+}
+
+.message.user {
+    justify-self: end;
+    background: var(--bot-accent);
+    color: #fff;
+}
+
+.ai-input {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    padding: 14px;
+    border-top: 1px solid rgba(80, 132, 180, 0.14);
+}
+
+.bubble {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    max-width: 300px;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    z-index: 20;
+}
+
+.bubble .tiny-bot {
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #fff, var(--bot-soft));
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow);
+    font-size: 36px;
+}
+
+.bubble-text {
+    padding: 14px 16px;
+    border-radius: 18px 18px 4px 18px;
+    background: #fff;
+    box-shadow: var(--shadow);
+}
+
+.pink-theme {
+    --primary: #d95c80;
+    --bot-accent: #f28caf;
+    --bot-soft: #ffe1eb;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(255,255,255,0.94), transparent 28%),
+        linear-gradient(135deg, #fff1f5 0%, #ffe1e8 48%, #fff7eb 100%);
+}
+
+.focus-theme {
+    --panel: rgba(13, 29, 43, 0.78);
+    --panel-strong: rgba(20, 38, 54, 0.92);
+    --text: #f4fbff;
+    --muted: #b6cfde;
+    --primary: #4cc2ff;
+    --bot-accent: #55c7ff;
+    --bot-soft: #17364d;
+    --shadow: 0 18px 42px rgba(0,0,0,0.24);
+    background: linear-gradient(135deg, #081522, #0d2537);
+}
+
+.contrast-theme {
+    --panel: #050505;
+    --panel-strong: #050505;
+    --text: #fff600;
+    --muted: #fff;
+    --primary: #00c8ff;
+    --accent: #fff600;
+    --bot-accent: #fff600;
+    --bot-soft: #1b1b1b;
+    --shadow: none;
+    background: #000;
+}
+
+.contrast-theme .page,
+.contrast-theme .tile,
+.contrast-theme .activity-card,
+.contrast-theme .game-stage,
+.contrast-theme .game-side,
+.contrast-theme .draw-panel,
+.contrast-theme .ai-panel,
+.contrast-theme .shape-card,
+.contrast-theme .soft-button,
+.contrast-theme .icon-button,
+.contrast-theme .mic-button {
+    border: 2px solid #fff600;
+}
+
+.large-text { font-size: 120%; }
+.dyslexia { font-family: "Comic Sans MS", Arial, sans-serif; }
+.reduce-motion *, .focus-mode * { animation: none !important; transition: none !important; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 900px) {
+    .hero-main, .game-board, .draw-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .tile-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ai-input {
+        grid-template-columns: 1fr;
+    }
+
+    .bubble {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+    }
+}
+</style>
+</head>
+<body>
+<main class="app-shell">
+    <section id="home" class="page hero active" aria-label="Home Atchii">
+        <div class="topbar">
+            <button class="icon-button" onclick="showPage('settings')" aria-label="Apri impostazioni">☰</button>
+            <div class="clock-card">
+                <small id="dateLabel">Oggi</small>
+                <strong id="timeLabel">10:30</strong>
+                <span>☀️</span>
+            </div>
+        </div>
+
+        <div class="hero-main">
+            <div class="mascot happy" id="mainMascot" aria-hidden="true">
+                <span class="antenna left"></span>
+                <span class="antenna right"></span>
+                <span class="ear left"></span>
+                <span class="ear right"></span>
+                <span class="arm left"></span>
+                <span class="arm right"></span>
+                <span class="mascot-body"></span>
+                <span class="foot left"></span>
+                <span class="foot right"></span>
+                <span class="mascot-head"></span>
+                <span class="mascot-screen">
+                    <span class="eye left"></span>
+                    <span class="eye right"></span>
+                    <span class="mouth"></span>
+                </span>
+            </div>
+
+            <div class="greeting">
+                <h1>Ciao Alex!</h1>
+                <p id="subtitle">Una piattaforma accessibile per autonomia, gioco e apprendimento.</p>
+                <button class="feeling-chip" onclick="showPage('assistant')">Parla con Atchii <span>🤖</span></button>
+            </div>
+        </div>
+
+        <div class="tile-grid" aria-label="Pagine principali">
+            <button class="tile" onclick="showPage('games')"><span class="tile-icon">🎮</span><strong>Giochi</strong></button>
+            <button class="tile" onclick="showPage('draw')"><span class="tile-icon">✏️</span><strong>Disegno</strong></button>
+            <button class="tile" onclick="showPage('assistant')"><span class="tile-icon">🤖</span><strong>Atchii AI</strong></button>
+            <button class="tile" onclick="showPage('routine')"><span class="tile-icon">🗓️</span><strong>Routine</strong></button>
+            <button class="tile" onclick="showPage('project')"><span class="tile-icon">🌐</span><strong>Progetto</strong></button>
+        </div>
+
+        <div class="bottom-actions">
+            <button class="soft-button" onclick="showPage('settings')">⚙️ Impostazioni</button>
+            <button class="mic-button" onclick="startVoice()" aria-label="Comandi vocali">🎙️</button>
+            <button class="soft-button" onclick="showPage('profile')">👤 Profilo</button>
+        </div>
+    </section>
+
+    <section id="project" class="page" aria-label="Progetto Atchii">
+        <div class="page-header">
+            <h2>Progetto Atchii</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="card-grid">
+            <article class="activity-card"><strong>Obiettivo</strong><p>Creare un'app e un sito che aiutano ragazzi e adulti nello spettro autistico a imparare, giocare e sviluppare autonomia con passaggi semplici.</p></article>
+            <article class="activity-card"><strong>Aiuto accessibile</strong><p>Atchii AI guida l'utente con voce calma, pulsanti grandi, comunicazione facilitata, routine visive e suggerimenti passo passo.</p></article>
+            <article class="activity-card"><strong>Per chi aiuta</strong><p>La piattaforma deve essere facile anche per genitori, educatori e adulti che non usano spesso il computer.</p></article>
+            <article class="activity-card"><strong>Telefono e sito</strong><p>L'interfaccia è pensata per funzionare su computer, tablet e telefono, con pagine responsive e comandi chiari.</p></article>
+            <article class="activity-card"><strong>Tecnologie</strong><p>Base web in HTML e JavaScript, servizi futuri in Python, giochi educativi esportabili da Unity e integrabili nella piattaforma.</p></article>
+            <article class="activity-card"><strong>Giochi AI</strong><p>I giochi devono adattarsi al ritmo della persona, dare rinforzi gentili e aiutare a imparare colori, forme, memoria, autonomia e comunicazione.</p></article>
+        </div>
+    </section>
+
+    <section id="games" class="page" aria-label="Giochi">
+        <div class="page-header">
+            <h2>Giochi eseguibili</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="game-tabs">
+            <button id="tab-shapes" class="active" onclick="setGame('shapes')">Forme e colori</button>
+            <button id="tab-memory" onclick="setGame('memory')">Memory</button>
+            <button id="tab-count" onclick="setGame('count')">Conta</button>
+            <button id="tab-platform" onclick="setGame('platform')">Platform addizioni</button>
+        </div>
+        <div class="game-board">
+            <div class="game-stage">
+                <div class="target-card">
+                    <div>
+                        <span id="gameLabel">Obiettivo</span>
+                        <strong id="targetText">Tocca il cerchio blu</strong>
+                    </div>
+                    <button class="soft-button" onclick="restartGame()">Nuovo gioco</button>
+                </div>
+                <div class="score-row">
+                    <span>Punti: <b id="score">0</b></span>
+                    <span>Serie: <b id="streak">0</b></span>
+                    <span>Livello: <b id="level">1</b></span>
+                </div>
+                <div id="gameArea"></div>
+            </div>
+            <aside class="game-side">
+                <h3>Aiuto di Atchii</h3>
+                <p id="gameHint">Osserva forma e colore, poi scegli con calma.</p>
+                <button class="soft-button" onclick="repeatHint()">Ripeti aiuto</button>
+            </aside>
+        </div>
+    </section>
+
+    <section id="draw" class="page" aria-label="Disegno">
+        <div class="page-header">
+            <h2>Disegno eseguibile</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="draw-layout">
+            <aside class="draw-panel">
+                <div class="draw-tools">
+                    <label>Strumento
+                        <select id="drawTool">
+                            <option value="brush">Pennello</option>
+                            <option value="eraser">Gomma</option>
+                            <option value="line">Linea</option>
+                            <option value="circle">Cerchio</option>
+                            <option value="robot">Timbro Atchii</option>
+                        </select>
+                    </label>
+                    <label>Colore
+                        <input id="drawColor" type="color" value="#4aa6f2">
+                    </label>
+                    <div class="color-row">
+                        <button class="color-swatch blue" onclick="setDrawColor('#4aa6f2')" aria-label="Blu"></button>
+                        <button class="color-swatch pink" onclick="setDrawColor('#f28caf')" aria-label="Rosa"></button>
+                        <button class="color-swatch green" onclick="setDrawColor('#43cfa5')" aria-label="Verde"></button>
+                        <button class="color-swatch yellow" onclick="setDrawColor('#ffc84a')" aria-label="Giallo"></button>
+                    </div>
+                    <label>Spessore
+                        <input id="brushSize" type="range" min="4" max="42" value="14">
+                    </label>
+                    <button class="soft-button" onclick="clearCanvas()">Pulisci</button>
+                    <button class="soft-button" onclick="saveDrawing()">Salva PNG</button>
+                    <button class="soft-button" onclick="drawRobotTemplate()">Disegna Atchii</button>
+                </div>
+            </aside>
+            <div class="canvas-wrap">
+                <canvas id="drawCanvas" width="1000" height="650"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section id="assistant" class="page" aria-label="Atchii AI">
+        <div class="page-header">
+            <h2>Atchii AI virtuale</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="card-grid" style="margin-bottom:16px">
+            <button class="activity-card" onclick="askQuick('Mi sento agitato')"><strong>Calmami</strong><p>Atchii propone un respiro e una pausa.</p></button>
+            <button class="activity-card" onclick="askQuick('Voglio giocare')"><strong>Voglio giocare</strong><p>Atchii apre il gioco più adatto.</p></button>
+            <button class="activity-card" onclick="askQuick('Aiutami a disegnare')"><strong>Aiutami a disegnare</strong><p>Atchii apre il canvas e prepara i colori.</p></button>
+            <button class="activity-card" onclick="askQuick('Spiegami il progetto')"><strong>Spiegami il progetto</strong><p>Atchii racconta a cosa serve la piattaforma.</p></button>
+        </div>
+        <div class="ai-panel">
+            <div class="chat-log" id="chatLog"></div>
+            <form class="ai-input" onsubmit="sendChat(event)">
+                <input id="chatInput" type="text" placeholder="Scrivi ad Atchii: gioco, disegna, relax, progetto, telefono, Unity..." autocomplete="off">
+                <button class="soft-button" type="submit">Invia</button>
+                <button class="soft-button" type="button" onclick="startVoice()">Voce</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="communication" class="page" aria-label="Comunicazione facilitata">
+        <div class="page-header">
+            <h2>Comunicazione CAA</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="emotion-board">
+            <button class="emotion" onclick="emotion('felice')">😊<br>Felice</button>
+            <button class="emotion" onclick="emotion('calmo')">😌<br>Calmo</button>
+            <button class="emotion" onclick="emotion('triste')">😢<br>Triste</button>
+            <button class="emotion" onclick="emotion('stanco')">😴<br>Stanco</button>
+            <button class="emotion" onclick="emotion('aiuto')">🙋<br>Aiuto</button>
+            <button class="emotion" onclick="emotion('pausa')">🍃<br>Pausa</button>
+        </div>
+    </section>
+
+    <section id="routine" class="page" aria-label="Routine">
+        <div class="page-header">
+            <h2>Routine</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="routine-list">
+            <label class="routine-item"><span>1</span><strong>Saluto</strong><input type="checkbox" onchange="routineCheck()"></label>
+            <label class="routine-item"><span>2</span><strong>Attivita scelta</strong><input type="checkbox" onchange="routineCheck()"></label>
+            <label class="routine-item"><span>3</span><strong>Pausa calma</strong><input type="checkbox" onchange="routineCheck()"></label>
+            <label class="routine-item"><span>4</span><strong>Conclusione</strong><input type="checkbox" onchange="routineCheck()"></label>
+        </div>
+    </section>
+
+    <section id="relax" class="page" aria-label="Relax">
+        <div class="page-header">
+            <h2>Relax</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="card-grid">
+            <button class="activity-card" onclick="breath()"><strong>🌬️ Respiro guidato</strong><p>Inspira, aspetta, espira insieme ad Atchii.</p></button>
+            <button class="activity-card" onclick="setTheme('focus')"><strong>🌙 Modalita notte</strong><p>Meno stimoli e colori più profondi.</p></button>
+            <button class="activity-card" onclick="speakAction('Facciamo una pausa tranquilla')"><strong>☁️ Pausa calma</strong><p>Un messaggio gentile quando serve rallentare.</p></button>
+        </div>
+    </section>
+
+    <section id="settings" class="page" aria-label="Impostazioni">
+        <div class="page-header">
+            <h2>Impostazioni accessibili</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="settings-row">
+            <label>Tema colori
+                <select onchange="setTheme(this.value)">
+                    <option value="blue">Calm Blue</option>
+                    <option value="pink">Soft Pink</option>
+                    <option value="focus">Focus Mode</option>
+                    <option value="contrast">High Contrast</option>
+                </select>
+            </label>
+            <label>Colore robot Atchii
+                <input id="botColor" type="color" value="#4aa6f2" oninput="setBotColor(this.value)">
+            </label>
+            <label>Font
+                <select onchange="setFont(this.value)">
+                    <option value="normal">Normale</option>
+                    <option value="dyslexia">Accessibile</option>
+                </select>
+            </label>
+            <label>Testo grande
+                <select onchange="toggleClass('large-text', this.value === 'yes')">
+                    <option value="no">No</option>
+                    <option value="yes">Si</option>
+                </select>
+            </label>
+            <label>Movimento
+                <select onchange="toggleClass('reduce-motion', this.value === 'yes')">
+                    <option value="no">Animazioni dolci</option>
+                    <option value="yes">Ridotto</option>
+                </select>
+            </label>
+        </div>
+    </section>
+
+    <section id="profile" class="page" aria-label="Profilo">
+        <div class="page-header">
+            <h2>Profilo</h2>
+            <button class="back-button" onclick="showPage('home')">← Home</button>
+        </div>
+        <div class="card-grid">
+            <article class="activity-card"><strong>👤 Alex</strong><p id="profileTheme">Tema preferito: Calm Blue. Atchii blu.</p></article>
+            <article class="activity-card"><strong>⭐ Progressi</strong><p id="profileProgress">Punti gioco: 0. Serie migliore: 0.</p></article>
+            <article class="activity-card"><strong>🤖 Atchii</strong><p>Assistente accessibile con chat, voce, giochi, disegno, routine e supporto per chi usa poco il PC.</p></article>
+        </div>
+    </section>
+</main>
+
+<div class="bubble" aria-live="polite">
+    <div class="bubble-text" id="atchiiBubble">Ciao! Sono Atchii, scegli una pagina.</div>
+    <div class="tiny-bot">🤖</div>
+</div>
+
+<script>
+const pages = document.querySelectorAll(".page");
+const bubble = document.getElementById("atchiiBubble");
+const mascot = document.getElementById("mainMascot");
+const targetText = document.getElementById("targetText");
+const gameArea = document.getElementById("gameArea");
+const gameHint = document.getElementById("gameHint");
+const scoreEl = document.getElementById("score");
+const streakEl = document.getElementById("streak");
+const levelEl = document.getElementById("level");
+const profileProgress = document.getElementById("profileProgress");
+const profileTheme = document.getElementById("profileTheme");
+const chatLog = document.getElementById("chatLog");
+const chatInput = document.getElementById("chatInput");
+const canvas = document.getElementById("drawCanvas");
+const ctx = canvas.getContext("2d");
+
+let score = 0;
+let streak = 0;
+let bestStreak = 0;
+let level = 1;
+let gameMode = "shapes";
+let currentTarget = {};
+let memoryFirst = null;
+let memoryLock = false;
+let memoryMatches = 0;
+let countAnswer = 0;
+let platformAnimation = null;
+let platformState = null;
+let platformKeys = {};
+let drawing = false;
+let startPoint = null;
+let snapshot = null;
+let inactivityTimer;
+let clickCount = 0;
+
+const rounds = [
+    { shape: "circle", color: "blue", label: "cerchio blu" },
+    { shape: "square", color: "pink", label: "quadrato rosa" },
+    { shape: "triangle", color: "green", label: "triangolo verde" },
+    { shape: "circle", color: "yellow", label: "cerchio giallo" },
+    { shape: "square", color: "purple", label: "quadrato viola" },
+    { shape: "triangle", color: "orange", label: "triangolo arancione" }
+];
+
+const colorNames = {
+    "#4aa6f2": "blu",
+    "#f28caf": "rosa",
+    "#43cfa5": "verde",
+    "#ffc84a": "giallo",
+    "#55c7ff": "azzurro",
+    "#fff600": "giallo contrasto"
+};
+
+const messages = {
+    felice: "Sono felice con te.",
+    calmo: "Restiamo calmi insieme.",
+    triste: "Va tutto bene, ti ascolto.",
+    stanco: "Puoi riposarti un momento.",
+    aiuto: "Chiedere aiuto va benissimo.",
+    pausa: "Facciamo una pausa tranquilla."
+};
+
+function showPage(id) {
+    pages.forEach(page => page.classList.toggle("active", page.id === id));
+    const names = {
+        home: "Home",
+        games: "Giochi",
+        draw: "Disegno",
+        assistant: "Atchii AI",
+        project: "Progetto",
+        communication: "Comunicazione",
+        routine: "Routine",
+        relax: "Relax",
+        settings: "Impostazioni",
+        profile: "Profilo"
+    };
+    say(`Pagina ${names[id]}. Sono qui con te.`, false);
+    if (id === "games") restartGame();
+    if (id === "draw") resizeCanvasView();
+}
+
+function say(text, voice = true) {
+    bubble.textContent = text;
+    if (voice) speak(text);
+}
+
+function speak(text) {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const voice = new SpeechSynthesisUtterance(text);
+    voice.lang = "it-IT";
+    const voices = window.speechSynthesis.getVoices();
+    const italianVoice = voices.find(item => item.lang && item.lang.toLowerCase().startsWith("it"));
+    if (italianVoice) voice.voice = italianVoice;
+    voice.rate = 0.72;
+    voice.pitch = 0.86;
+    voice.volume = 0.78;
+    window.speechSynthesis.speak(voice);
+}
+
+function setMascot(state) {
+    mascot.className = `mascot ${state}`;
+}
+
+function setTheme(theme) {
+    document.body.classList.remove("pink-theme", "focus-theme", "contrast-theme");
+    const defaults = {
+        blue: "#4aa6f2",
+        pink: "#f28caf",
+        focus: "#55c7ff",
+        contrast: "#fff600"
+    };
+    if (theme === "pink") document.body.classList.add("pink-theme");
+    if (theme === "focus") document.body.classList.add("focus-theme");
+    if (theme === "contrast") document.body.classList.add("contrast-theme");
+    setBotColor(defaults[theme] || defaults.blue);
+    say("Tema aggiornato. Anche Atchii ha cambiato colore.");
+}
+
+function setBotColor(color) {
+    document.documentElement.style.setProperty("--bot-accent", color);
+    document.documentElement.style.setProperty("--bot-soft", mixWithWhite(color, 0.78));
+    document.getElementById("botColor").value = color;
+    document.getElementById("drawColor").value = color;
+    profileTheme.textContent = `Tema preferito aggiornato. Atchii colore ${colorNames[color] || color}.`;
+}
+
+function mixWithWhite(hex, amount) {
+    const value = hex.replace("#", "");
+    const r = parseInt(value.slice(0, 2), 16);
+    const g = parseInt(value.slice(2, 4), 16);
+    const b = parseInt(value.slice(4, 6), 16);
+    const mix = channel => Math.round(channel + (255 - channel) * amount).toString(16).padStart(2, "0");
+    return `#${mix(r)}${mix(g)}${mix(b)}`;
+}
+
+function setFont(font) {
+    document.body.classList.toggle("dyslexia", font === "dyslexia");
+}
+
+function toggleClass(className, enabled) {
+    document.body.classList.toggle(className, enabled);
+}
+
+function setGame(mode) {
+    gameMode = mode;
+    document.querySelectorAll(".game-tabs button").forEach(button => button.classList.remove("active"));
+    document.getElementById(`tab-${mode}`).classList.add("active");
+    restartGame();
+}
+
+function restartGame() {
+    stopPlatformGame();
+    if (gameMode === "shapes") newShapeRound();
+    if (gameMode === "memory") newMemoryGame();
+    if (gameMode === "count") newCountRound();
+    if (gameMode === "platform") newPlatformGame();
+}
+
+function addScore(points) {
+    score += points;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    level = Math.max(1, Math.floor(score / 50) + 1);
+    updateScore();
+}
+
+function missScore() {
+    streak = 0;
+    updateScore();
+}
+
+function updateScore() {
+    scoreEl.textContent = score;
+    streakEl.textContent = streak;
+    levelEl.textContent = level;
+    profileProgress.textContent = `Punti gioco: ${score}. Serie migliore: ${bestStreak}. Livello: ${level}.`;
+}
+
+function newShapeRound() {
+    currentTarget = rounds[Math.floor(Math.random() * rounds.length)];
+    targetText.textContent = `Tocca il ${currentTarget.label}`;
+    gameHint.textContent = "Cerca insieme forma e colore.";
+    const choices = shuffle([...rounds]).slice(0, 6);
+    if (!choices.some(choice => sameChoice(choice, currentTarget))) choices[0] = currentTarget;
+    gameArea.className = "shape-grid";
+    gameArea.innerHTML = "";
+    shuffle(choices).forEach(choice => {
+        const button = document.createElement("button");
+        button.className = "shape-card";
+        button.setAttribute("aria-label", choice.label);
+        button.onclick = () => chooseShape(choice);
+        const shape = document.createElement("span");
+        shape.className = `shape ${choice.shape} ${choice.color}`;
+        button.appendChild(shape);
+        gameArea.appendChild(button);
+    });
+}
+
+function chooseShape(choice) {
+    if (sameChoice(choice, currentTarget)) {
+        addScore(10);
+        setMascot("proud");
+        say("Ottimo! Forma e colore sono giusti.");
+        setTimeout(newShapeRound, 800);
+    } else {
+        missScore();
+        setMascot("calm");
+        say("Quasi. Guarda prima la forma, poi il colore.");
+    }
+}
+
+function sameChoice(a, b) {
+    return a.shape === b.shape && a.color === b.color;
+}
+
+function newMemoryGame() {
+    targetText.textContent = "Trova le coppie uguali";
+    gameHint.textContent = "Scopri due carte. Se sono uguali restano aperte.";
+    memoryFirst = null;
+    memoryLock = false;
+    memoryMatches = 0;
+    const icons = ["🎮", "✏️", "💬", "🍃", "⭐", "🤖"].slice(0, Math.min(3 + level, 6));
+    const cards = shuffle([...icons, ...icons]);
+    gameArea.className = "memory-grid";
+    gameArea.innerHTML = "";
+    cards.forEach((icon, index) => {
+        const button = document.createElement("button");
+        button.className = "memory-card";
+        button.dataset.icon = icon;
+        button.dataset.open = "false";
+        button.textContent = "?";
+        button.onclick = () => flipMemory(button);
+        button.setAttribute("aria-label", `Carta ${index + 1}`);
+        gameArea.appendChild(button);
+    });
+}
+
+function flipMemory(card) {
+    if (memoryLock || card.dataset.open === "true") return;
+    card.dataset.open = "true";
+    card.textContent = card.dataset.icon;
+    if (!memoryFirst) {
+        memoryFirst = card;
+        return;
+    }
+    if (memoryFirst.dataset.icon === card.dataset.icon) {
+        card.classList.add("matched");
+        memoryFirst.classList.add("matched");
+        memoryFirst = null;
+        memoryMatches++;
+        addScore(8);
+        say("Coppia trovata!");
+        if (memoryMatches === gameArea.children.length / 2) {
+            setMascot("proud");
+            say("Hai completato il memory. Bravissimo!");
+        }
+        return;
+    }
+    memoryLock = true;
+    missScore();
+    say("Non sono uguali. Riproviamo.");
+    setTimeout(() => {
+        card.dataset.open = "false";
+        memoryFirst.dataset.open = "false";
+        card.textContent = "?";
+        memoryFirst.textContent = "?";
+        memoryFirst = null;
+        memoryLock = false;
+    }, 850);
+}
+
+function newCountRound() {
+    countAnswer = Math.floor(Math.random() * 5) + Math.min(level + 1, 6);
+    targetText.textContent = "Quanti robot vedi?";
+    gameHint.textContent = "Conta i robot e scegli il numero giusto.";
+    gameArea.className = "count-grid";
+    gameArea.innerHTML = "";
+    const display = document.createElement("div");
+    display.className = "activity-card";
+    display.style.gridColumn = "1 / -1";
+    display.style.fontSize = "34px";
+    display.style.textAlign = "center";
+    display.textContent = Array(countAnswer).fill("🤖").join(" ");
+    gameArea.appendChild(display);
+    shuffle([countAnswer, countAnswer + 1, Math.max(1, countAnswer - 1)]).forEach(number => {
+        const button = document.createElement("button");
+        button.className = "count-card";
+        button.textContent = number;
+        button.onclick = () => chooseCount(number);
+        gameArea.appendChild(button);
+    });
+}
+
+function chooseCount(number) {
+    if (number === countAnswer) {
+        addScore(10);
+        setMascot("proud");
+        say("Esatto, hai contato benissimo.");
+        setTimeout(newCountRound, 850);
+    } else {
+        missScore();
+        setMascot("calm");
+        say("Contiamo di nuovo insieme, con calma.");
+    }
+}
+
+function newPlatformGame() {
+    targetText.textContent = "Super Atchii: risolvi le addizioni";
+    gameHint.textContent = "Muoviti con frecce o A D. Salta con spazio. Davanti alla porta scrivi il risultato.";
+    gameArea.className = "platform-wrap";
+    gameArea.innerHTML = `
+        <canvas id="platformCanvas" width="960" height="430"></canvas>
+        <div id="mathAnswerBox" class="math-answer">
+            <strong id="platformQuestion">2 + 3 = ?</strong>
+            <input id="platformAnswer" type="number" inputmode="numeric" placeholder="Risposta">
+            <button class="soft-button" onclick="submitPlatformAnswer()">Apri</button>
+        </div>
+    `;
+
+    platformState = {
+        canvas: document.getElementById("platformCanvas"),
+        ctx: document.getElementById("platformCanvas").getContext("2d"),
+        questionBox: document.getElementById("mathAnswerBox"),
+        questionText: document.getElementById("platformQuestion"),
+        answerInput: document.getElementById("platformAnswer"),
+        gravity: 0.72,
+        cameraX: 0,
+        lockedGate: null,
+        won: false,
+        player: { x: 44, y: 292, w: 34, h: 48, vx: 0, vy: 0, grounded: false },
+        platforms: [
+            { x: 0, y: 370, w: 360, h: 60 },
+            { x: 430, y: 330, w: 220, h: 40 },
+            { x: 720, y: 285, w: 220, h: 40 },
+            { x: 1030, y: 340, w: 300, h: 50 },
+            { x: 1410, y: 300, w: 260, h: 45 },
+            { x: 1760, y: 370, w: 360, h: 60 }
+        ],
+        coins: [
+            { x: 180, y: 315, taken: false },
+            { x: 510, y: 280, taken: false },
+            { x: 820, y: 235, taken: false },
+            { x: 1510, y: 250, taken: false }
+        ],
+        gates: [
+            { x: 350, y: 300, w: 44, h: 70, a: 2, b: 3, open: false },
+            { x: 955, y: 215, w: 44, h: 70, a: 4, b: 5, open: false },
+            { x: 1688, y: 230, w: 44, h: 70, a: 7, b: 2, open: false }
+        ],
+        flag: { x: 1960, y: 270, w: 36, h: 100 }
+    };
+
+    say("Platform addizioni pronto. Vai avanti risolvendo le somme.");
+    platformLoop();
+}
+
+function stopPlatformGame() {
+    if (platformAnimation !== null) {
+        cancelAnimationFrame(platformAnimation);
+        platformAnimation = null;
+    }
+    platformState = null;
+}
+
+function platformLoop() {
+    if (!platformState || gameMode !== "platform") return;
+    updatePlatform();
+    drawPlatform();
+    platformAnimation = requestAnimationFrame(platformLoop);
+}
+
+function updatePlatform() {
+    const state = platformState;
+    const player = state.player;
+    const speed = 4.2;
+    const jump = -13.5;
+
+    player.vx = 0;
+    if (!state.lockedGate && !state.won) {
+        if (platformKeys.ArrowLeft || platformKeys.KeyA) player.vx = -speed;
+        if (platformKeys.ArrowRight || platformKeys.KeyD) player.vx = speed;
+        if ((platformKeys.Space || platformKeys.ArrowUp || platformKeys.KeyW) && player.grounded) {
+            player.vy = jump;
+            player.grounded = false;
+        }
+    }
+
+    player.vy += state.gravity;
+    player.x += player.vx;
+    player.y += player.vy;
+    player.grounded = false;
+
+    state.platforms.forEach(platform => {
+        if (rectsOverlap(player, platform) && player.vy >= 0 && player.y + player.h - player.vy <= platform.y + 8) {
+            player.y = platform.y - player.h;
+            player.vy = 0;
+            player.grounded = true;
+        }
+    });
+
+    state.gates.forEach(gate => {
+        if (!gate.open && rectsOverlap(player, gate)) {
+            player.x = gate.x - player.w - 2;
+            openPlatformQuestion(gate);
+        }
+    });
+
+    state.coins.forEach(coin => {
+        if (!coin.taken && circleRectOverlap(coin.x, coin.y, 15, player)) {
+            coin.taken = true;
+            addScore(2);
+            say("Moneta presa.", false);
+        }
+    });
+
+    if (rectsOverlap(player, state.flag) && !state.won) {
+        state.won = true;
+        addScore(25);
+        setMascot("proud");
+        say("Livello completato. Hai risolto tutte le addizioni.");
+    }
+
+    if (player.y > 520) {
+        player.x = 44;
+        player.y = 292;
+        player.vx = 0;
+        player.vy = 0;
+        missScore();
+        say("Riproviamo dal punto di partenza.");
+    }
+
+    state.cameraX = Math.max(0, Math.min(player.x - 210, 1160));
+}
+
+function drawPlatform() {
+    const state = platformState;
+    const ctx2d = state.ctx;
+    const canvas2d = state.canvas;
+    const cam = state.cameraX;
+
+    ctx2d.clearRect(0, 0, canvas2d.width, canvas2d.height);
+    ctx2d.fillStyle = "#bfe8ff";
+    ctx2d.fillRect(0, 0, canvas2d.width, canvas2d.height);
+    ctx2d.fillStyle = "rgba(255,255,255,0.72)";
+    for (let i = 0; i < 8; i++) drawCloud(ctx2d, 120 + i * 210 - cam * 0.35, 66 + (i % 3) * 28);
+
+    state.platforms.forEach(platform => {
+        ctx2d.fillStyle = "#43cfa5";
+        roundRect(ctx2d, platform.x - cam, platform.y, platform.w, platform.h, 12, true);
+        ctx2d.fillStyle = "#2d9b78";
+        ctx2d.fillRect(platform.x - cam, platform.y + 12, platform.w, 8);
+    });
+
+    state.coins.forEach(coin => {
+        if (coin.taken) return;
+        ctx2d.fillStyle = "#ffc84a";
+        ctx2d.beginPath();
+        ctx2d.arc(coin.x - cam, coin.y, 15, 0, Math.PI * 2);
+        ctx2d.fill();
+        ctx2d.fillStyle = "#fff8c9";
+        ctx2d.fillRect(coin.x - cam - 3, coin.y - 9, 6, 18);
+    });
+
+    state.gates.forEach(gate => {
+        if (gate.open) return;
+        ctx2d.fillStyle = "rgba(7,19,29,0.88)";
+        roundRect(ctx2d, gate.x - cam, gate.y, gate.w, gate.h, 10, true);
+        ctx2d.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--bot-accent").trim() || "#4aa6f2";
+        ctx2d.font = "bold 18px Arial";
+        ctx2d.fillText(`${gate.a}+${gate.b}`, gate.x - cam + 4, gate.y + 39);
+    });
+
+    ctx2d.fillStyle = "#ff668c";
+    ctx2d.fillRect(state.flag.x - cam, state.flag.y, 8, state.flag.h);
+    ctx2d.fillStyle = "#ffc84a";
+    ctx2d.beginPath();
+    ctx2d.moveTo(state.flag.x + 8 - cam, state.flag.y + 8);
+    ctx2d.lineTo(state.flag.x + 72 - cam, state.flag.y + 26);
+    ctx2d.lineTo(state.flag.x + 8 - cam, state.flag.y + 48);
+    ctx2d.closePath();
+    ctx2d.fill();
+
+    drawPlatformPlayer(ctx2d, state.player.x - cam, state.player.y, state.player.w, state.player.h);
+}
+
+function drawPlatformPlayer(ctx2d, x, y, w, h) {
+    const color = getComputedStyle(document.documentElement).getPropertyValue("--bot-accent").trim() || "#4aa6f2";
+    ctx2d.fillStyle = color;
+    roundRect(ctx2d, x + 5, y + 20, w - 10, h - 12, 10, true);
+    ctx2d.fillStyle = "#ffffff";
+    roundRect(ctx2d, x, y, w, 30, 12, true);
+    ctx2d.fillStyle = "#07131d";
+    roundRect(ctx2d, x + 5, y + 7, w - 10, 17, 8, true);
+    ctx2d.fillStyle = color;
+    ctx2d.beginPath();
+    ctx2d.arc(x + 13, y + 15, 3, 0, Math.PI * 2);
+    ctx2d.arc(x + 22, y + 15, 3, 0, Math.PI * 2);
+    ctx2d.fill();
+}
+
+function drawCloud(ctx2d, x, y) {
+    ctx2d.beginPath();
+    ctx2d.arc(x, y, 18, 0, Math.PI * 2);
+    ctx2d.arc(x + 18, y - 8, 22, 0, Math.PI * 2);
+    ctx2d.arc(x + 40, y, 18, 0, Math.PI * 2);
+    ctx2d.fill();
+}
+
+function roundRect(ctx2d, x, y, w, h, r, fill) {
+    ctx2d.beginPath();
+    ctx2d.moveTo(x + r, y);
+    ctx2d.arcTo(x + w, y, x + w, y + h, r);
+    ctx2d.arcTo(x + w, y + h, x, y + h, r);
+    ctx2d.arcTo(x, y + h, x, y, r);
+    ctx2d.arcTo(x, y, x + w, y, r);
+    if (fill) ctx2d.fill();
+}
+
+function openPlatformQuestion(gate) {
+    const state = platformState;
+    if (state.lockedGate === gate) return;
+    state.lockedGate = gate;
+    state.questionBox.classList.add("active");
+    state.questionText.textContent = `${gate.a} + ${gate.b} = ?`;
+    state.answerInput.value = "";
+    state.answerInput.focus();
+    say(`Quanto fa ${gate.a} più ${gate.b}?`);
+}
+
+function submitPlatformAnswer() {
+    const state = platformState;
+    if (!state || !state.lockedGate) return;
+    const answer = Number(state.answerInput.value);
+    const gate = state.lockedGate;
+    if (answer === gate.a + gate.b) {
+        gate.open = true;
+        state.lockedGate = null;
+        state.questionBox.classList.remove("active");
+        addScore(10);
+        setMascot("proud");
+        say("Giusto. La porta è aperta.");
+    } else {
+        missScore();
+        setMascot("calm");
+        say("Riprova con calma. Conta i numeri insieme.");
+        state.answerInput.value = "";
+        state.answerInput.focus();
+    }
+}
+
+function rectsOverlap(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function circleRectOverlap(cx, cy, radius, rect) {
+    const closestX = Math.max(rect.x, Math.min(cx, rect.x + rect.w));
+    const closestY = Math.max(rect.y, Math.min(cy, rect.y + rect.h));
+    return Math.hypot(cx - closestX, cy - closestY) < radius;
+}
+
+function repeatHint() {
+    say(gameHint.textContent);
+}
+
+function shuffle(items) {
+    return items.sort(() => Math.random() - 0.5);
+}
+
+function resizeCanvasView() {
+    const current = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    ctx.putImageData(current, 0, 0);
+}
+
+function getCanvasPoint(event) {
+    const rect = canvas.getBoundingClientRect();
+    const point = event.touches ? event.touches[0] : event;
+    return {
+        x: (point.clientX - rect.left) * (canvas.width / rect.width),
+        y: (point.clientY - rect.top) * (canvas.height / rect.height)
+    };
+}
+
+function beginDraw(event) {
+    drawing = true;
+    startPoint = getCanvasPoint(event);
+    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = document.getElementById("brushSize").value;
+    ctx.strokeStyle = document.getElementById("drawTool").value === "eraser" ? "#ffffff" : document.getElementById("drawColor").value;
+    ctx.fillStyle = document.getElementById("drawColor").value;
+    if (document.getElementById("drawTool").value === "brush" || document.getElementById("drawTool").value === "eraser") {
+        ctx.beginPath();
+        ctx.moveTo(startPoint.x, startPoint.y);
+    }
+    if (document.getElementById("drawTool").value === "robot") {
+        drawMiniRobot(startPoint.x, startPoint.y, document.getElementById("drawColor").value);
+        drawing = false;
+    }
+}
+
+function moveDraw(event) {
+    if (!drawing) return;
+    event.preventDefault();
+    const point = getCanvasPoint(event);
+    const tool = document.getElementById("drawTool").value;
+    if (tool === "brush" || tool === "eraser") {
+        ctx.lineTo(point.x, point.y);
+        ctx.stroke();
+    } else {
+        ctx.putImageData(snapshot, 0, 0);
+        ctx.beginPath();
+        if (tool === "line") {
+            ctx.moveTo(startPoint.x, startPoint.y);
+            ctx.lineTo(point.x, point.y);
+            ctx.stroke();
+        }
+        if (tool === "circle") {
+            const radius = Math.hypot(point.x - startPoint.x, point.y - startPoint.y);
+            ctx.arc(startPoint.x, startPoint.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    }
+}
+
+function endDraw() {
+    drawing = false;
+}
+
+function setDrawColor(color) {
+    document.getElementById("drawColor").value = color;
+    say("Colore di disegno selezionato.", false);
+}
+
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    say("Foglio pulito.");
+}
+
+function saveDrawing() {
+    const link = document.createElement("a");
+    link.download = "disegno-atchii.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+    say("Disegno salvato.");
+}
+
+function drawRobotTemplate() {
+    drawMiniRobot(canvas.width / 2, canvas.height / 2, document.getElementById("drawColor").value, 2.4);
+    say("Ho disegnato Atchii sul foglio.");
+}
+
+function drawMiniRobot(x, y, color, scale = 1) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    ctx.fillStyle = mixWithWhite(color, 0.72);
+    ctx.beginPath();
+    ctx.roundRect(-38, -44, 76, 58, 22);
+    ctx.fill();
+    ctx.fillStyle = "#07131d";
+    ctx.beginPath();
+    ctx.roundRect(-29, -32, 58, 36, 16);
+    ctx.fill();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(-15, -15, 5, 0, Math.PI * 2);
+    ctx.arc(15, -15, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(0, -10, 12, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(-26, 16, 52, 46, 20);
+    ctx.fill();
+    ctx.restore();
+}
+
+if (CanvasRenderingContext2D.prototype.roundRect === undefined) {
+    CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+        this.moveTo(x + radius, y);
+        this.arcTo(x + width, y, x + width, y + height, radius);
+        this.arcTo(x + width, y + height, x, y + height, radius);
+        this.arcTo(x, y + height, x, y, radius);
+        this.arcTo(x, y, x + width, y, radius);
+        return this;
+    };
+}
+
+canvas.addEventListener("pointerdown", beginDraw);
+canvas.addEventListener("pointermove", moveDraw);
+canvas.addEventListener("pointerup", endDraw);
+canvas.addEventListener("pointerleave", endDraw);
+
+function addChat(text, who) {
+    const message = document.createElement("div");
+    message.className = `message ${who}`;
+    message.textContent = text;
+    chatLog.appendChild(message);
+    chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+function sendChat(event) {
+    event.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = "";
+    handleAssistant(text);
+}
+
+function askQuick(text) {
+    showPage("assistant");
+    handleAssistant(text);
+}
+
+function handleAssistant(text) {
+    addChat(text, "user");
+    const response = assistantReply(text);
+    addChat(response.text, "bot");
+    say(response.text);
+    if (response.action) response.action();
+}
+
+function assistantReply(rawText) {
+    const text = rawText.toLowerCase();
+    if (text.includes("progetto") || text.includes("applicazione") || text.includes("software") || text.includes("website") || text.includes("sito")) {
+        return { text: "Atchii nasce come app e sito accessibile per imparare giocando, aumentare l'autonomia e aiutare anche adulti o educatori che usano poco il computer.", action: () => showPage("project") };
+    }
+    if (text.includes("autismo") || text.includes("autistic") || text.includes("autonomia")) {
+        return { text: "Posso aiutare con passaggi semplici, routine visive, voce calma, pulsanti grandi e giochi che rispettano il ritmo della persona.", action: () => showPage("project") };
+    }
+    if (text.includes("adult") || text.includes("genitor") || text.includes("educator") || text.includes("pc")) {
+        return { text: "La piattaforma deve essere semplice anche per chi aiuta: poche scelte chiare, istruzioni brevi e strumenti pronti da usare.", action: () => showPage("project") };
+    }
+    if (text.includes("telefono") || text.includes("mobile") || text.includes("tablet")) {
+        return { text: "Atchii è pensato per funzionare anche su telefono e tablet, con layout responsive e comandi grandi.", action: () => showPage("project") };
+    }
+    if (text.includes("python") || text.includes("html") || text.includes("javascript") || text.includes("unity")) {
+        return { text: "Ho incluso nel sito anche un prototipo di platform con addizioni, ispirato a un gioco Unity educativo.", action: () => { showPage("games"); setGame("platform"); } };
+    }
+    if (text.includes("mario") || text.includes("platform") || text.includes("addizion") || text.includes("somma")) {
+        return { text: "Apro il platform con addizioni. Per andare avanti devi risolvere le somme.", action: () => { showPage("games"); setGame("platform"); } };
+    }
+    if (text.includes("gioco") || text.includes("giocare")) {
+        return { text: "Certo. Apro i giochi e preparo un'attivita semplice.", action: () => showPage("games") };
+    }
+    if (text.includes("disegn") || text.includes("color")) {
+        return { text: "Andiamo al disegno. Puoi usare pennello, gomma, forme e timbro Atchii.", action: () => showPage("draw") };
+    }
+    if (text.includes("agit") || text.includes("ansia") || text.includes("stress") || text.includes("calma")) {
+        return { text: "Sono qui. Facciamo un respiro guidato insieme.", action: breath };
+    }
+    if (text.includes("routine") || text.includes("cosa devo fare")) {
+        return { text: "Ti mostro la routine: un passo alla volta.", action: () => showPage("routine") };
+    }
+    if (text.includes("rosa")) {
+        return { text: "Imposto Atchii rosa.", action: () => setTheme("pink") };
+    }
+    if (text.includes("blu")) {
+        return { text: "Imposto Atchii blu.", action: () => setTheme("blue") };
+    }
+    if (text.includes("contrasto")) {
+        return { text: "Attivo l'alto contrasto.", action: () => setTheme("contrast") };
+    }
+    if (text.includes("ciao")) {
+        return { text: "Ciao! Sono Atchii. Posso aprire giochi, disegno, relax, routine o aiutarti a comunicare." };
+    }
+    return { text: "Ho capito. Posso aiutarti con giochi, disegno, relax, routine, colori e comunicazione. Scrivimi cosa vuoi fare." };
+}
+
+function startVoice() {
+    if (!("SpeechRecognition" in window) && !("webkitSpeechRecognition" in window)) {
+        say("Il riconoscimento vocale non è disponibile in questo browser.");
+        return;
+    }
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new Recognition();
+    recognition.lang = "it-IT";
+    setMascot("proud");
+    say("Ti ascolto.");
+    recognition.onresult = event => handleAssistant(event.results[0][0].transcript);
+    recognition.onend = () => setMascot("happy");
+    recognition.start();
+}
+
+function speakAction(text) {
+    say(text);
+    setMascot("happy");
+}
+
+function emotion(type) {
+    const text = messages[type] || "Ti ascolto.";
+    say(text);
+    setMascot(type === "triste" ? "sad" : type === "calmo" || type === "pausa" ? "calm" : "happy");
+}
+
+function breath() {
+    showPage("relax");
+    const steps = ["Inspira piano.", "Tieni un momento.", "Espira lentamente.", "Ben fatto."];
+    let index = 0;
+    setMascot("calm");
+    say(steps[index]);
+    const interval = setInterval(() => {
+        index++;
+        if (index >= steps.length) {
+            clearInterval(interval);
+            return;
+        }
+        say(steps[index]);
+    }, 2600);
+}
+
+function routineCheck() {
+    const checked = document.querySelectorAll(".routine-item input:checked").length;
+    if (checked === 4) {
+        addScore(12);
+        say("Routine completata. Ottimo lavoro.");
+        setMascot("proud");
+    } else {
+        say(`Hai completato ${checked} passi della routine.`, false);
+    }
+}
+
+function updateClock() {
+    const now = new Date();
+    document.getElementById("timeLabel").textContent = now.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+    document.getElementById("dateLabel").textContent = now.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
+}
+
+function resetInactivity() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+        say("Puoi riposarti un momento.", false);
+        setMascot("calm");
+    }, 16000);
+}
+
+document.addEventListener("mousemove", resetInactivity);
+document.addEventListener("click", () => {
+    clickCount++;
+    resetInactivity();
+    if (clickCount > 10) {
+        say("Andiamo con calma.");
+        setMascot("calm");
+        clickCount = 0;
+    }
+});
+
+document.addEventListener("keydown", event => {
+    platformKeys[event.code] = true;
+    if (gameMode === "platform" && ["ArrowLeft", "ArrowRight", "ArrowUp", "Space"].includes(event.code)) {
+        event.preventDefault();
+    }
+    if (gameMode === "platform" && event.code === "Enter") {
+        submitPlatformAnswer();
+    }
+});
+
+document.addEventListener("keyup", event => {
+    platformKeys[event.code] = false;
+});
+
+updateClock();
+setInterval(updateClock, 30000);
+setBotColor("#4aa6f2");
+restartGame();
+addChat("Ciao! Sono Atchii. Scrivimi: gioco, disegno, relax, routine, progetto, Unity, telefono o aiuto.", "bot");
+</script>
+</body>
+</html>
