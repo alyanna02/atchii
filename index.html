@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atchii Assistant</title>
+<script src="atchii-config.js"></script>
 <style>
 :root {
     --panel: rgba(255, 255, 255, 0.78);
@@ -1034,6 +1035,7 @@ const chatLog = document.getElementById("chatLog");
 const chatInput = document.getElementById("chatInput");
 const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
+const ATCHII_API_URL = window.ATCHII_API_URL || "http://127.0.0.1:5050/api/atchii";
 
 let score = 0;
 let streak = 0;
@@ -1738,15 +1740,61 @@ function askQuick(text) {
     handleAssistant(text);
 }
 
-function handleAssistant(text) {
+async function handleAssistant(text) {
     addChat(text, "user");
-    const response = assistantReply(text);
+    const response = await assistantReply(text);
     addChat(response.text, "bot");
     say(response.text);
     if (response.action) response.action();
 }
 
-function assistantReply(rawText) {
+async function assistantReply(rawText) {
+    const onlineReply = await askAtchiiBackend(rawText);
+    if (onlineReply) {
+        return onlineReply;
+    }
+    return localAssistantReply(rawText);
+}
+
+async function askAtchiiBackend(rawText) {
+    try {
+        const response = await fetch(ATCHII_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                message: rawText,
+                mode: "child"
+            })
+        });
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        if (!data.reply) return null;
+
+        return {
+            text: data.reply,
+            action: actionFromAssistantText(rawText + " " + data.reply)
+        };
+    } catch (error) {
+        return null;
+    }
+}
+
+function actionFromAssistantText(rawText) {
+    const text = rawText.toLowerCase();
+    if (text.includes("platform") || text.includes("mario") || text.includes("addizion") || text.includes("somma")) {
+        return () => { showPage("games"); setGame("platform"); };
+    }
+    if (text.includes("gioco") || text.includes("giocare")) return () => showPage("games");
+    if (text.includes("disegn") || text.includes("color")) return () => showPage("draw");
+    if (text.includes("routine")) return () => showPage("routine");
+    if (text.includes("relax") || text.includes("respiro") || text.includes("calma")) return () => showPage("relax");
+    if (text.includes("progetto") || text.includes("sito") || text.includes("website")) return () => showPage("project");
+    return null;
+}
+
+function localAssistantReply(rawText) {
     const text = rawText.toLowerCase();
     if (text.includes("progetto") || text.includes("applicazione") || text.includes("software") || text.includes("website") || text.includes("sito")) {
         return { text: "Atchii nasce come app e sito accessibile per imparare giocando, aumentare l'autonomia e aiutare anche adulti o educatori che usano poco il computer.", action: () => showPage("project") };
