@@ -116,6 +116,110 @@ button {
     font-size: 15px;
 }
 
+.support-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.support-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 62px;
+    padding: 12px;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px rgba(80, 132, 180, 0.15);
+}
+
+.support-option input {
+    width: 24px;
+    height: 24px;
+}
+
+.assist-panel {
+    display: none;
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    width: min(430px, calc(100% - 48px));
+    padding: 16px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.96);
+    box-shadow: var(--shadow);
+    z-index: 21;
+}
+
+.assist-panel.active {
+    display: block;
+}
+
+.assist-title {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.assist-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+.assist-icon {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--bot-accent) 14%, white);
+    font-size: 34px;
+}
+
+.assist-text {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.35;
+}
+
+.assist-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.assist-actions button {
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--bot-accent) 12%, white);
+    color: var(--text);
+}
+
+.blind-mode button:focus-visible,
+.blind-mode input:focus-visible,
+.blind-mode select:focus-visible,
+.blind-mode textarea:focus-visible {
+    outline: 4px solid var(--accent);
+    outline-offset: 4px;
+}
+
+.nonverbal-mode .bubble-text,
+.nonverbal-mode .assist-text {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.nonverbal-mode .emotion,
+.nonverbal-mode .tile,
+.nonverbal-mode .soft-button {
+    min-height: 70px;
+}
+
 .theme-choice-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -894,6 +998,13 @@ button {
                 </select>
             </label>
 
+            <strong>Supporti di accessibilità</strong>
+            <div class="support-grid">
+                <label class="support-option"><input id="supportCognitiveInput" type="checkbox" checked> Supporto cognitivo e routine semplici</label>
+                <label class="support-option"><input id="supportNonverbalInput" type="checkbox"> Persona muta o non verbale: più testo, immagini e CAA</label>
+                <label class="support-option"><input id="supportBlindInput" type="checkbox"> Persona cieca o non vedente: guida vocale</label>
+            </div>
+
             <div class="theme-choice-grid" aria-label="Anteprime tema">
                 <button type="button" class="theme-choice active" data-theme-card="blue" onclick="selectThemeCard('blue')">Calm Blue<div class="theme-swatch"><span style="background:#4aa6f2"></span><span style="background:#d8efff"></span><span style="background:#fff"></span></div></button>
                 <button type="button" class="theme-choice" data-theme-card="pink" onclick="selectThemeCard('pink')">Soft Pink<div class="theme-swatch"><span style="background:#f28caf"></span><span style="background:#ffe1eb"></span><span style="background:#fff7eb"></span></div></button>
@@ -901,7 +1012,7 @@ button {
                 <button type="button" class="theme-choice" data-theme-card="contrast" onclick="selectThemeCard('contrast')">Contrasto<div class="theme-swatch"><span style="background:#000"></span><span style="background:#fff600"></span><span style="background:#00c8ff"></span></div></button>
             </div>
 
-            <p class="privacy-note">Questi dati restano salvati solo in questo browser. Non vengono inviati ad Atchii AI o a OpenAI.</p>
+            <p class="privacy-note">Questi dati e supporti restano salvati solo in questo browser. Non vengono inviati ad Atchii AI o a OpenAI.</p>
             <button class="soft-button" type="submit">Entra in Atchii</button>
         </form>
 
@@ -995,6 +1106,8 @@ button {
         <div class="card-grid">
             <article class="activity-card"><strong>Obiettivo</strong><p>Creare un'app e un sito che aiutano ragazzi e adulti nello spettro autistico a imparare, giocare e sviluppare autonomia con passaggi semplici.</p></article>
             <article class="activity-card"><strong>Aiuto accessibile</strong><p>Atchii AI guida l'utente con voce calma, pulsanti grandi, comunicazione facilitata, routine visive e suggerimenti passo passo.</p></article>
+            <article class="activity-card"><strong>Supporto cieco/non vedente</strong><p>Atchii può descrivere vocalmente pagine, comandi, giochi, porte matematiche e passaggi importanti.</p></article>
+            <article class="activity-card"><strong>Supporto muto/non verbale</strong><p>Atchii mostra testo grande, simboli, immagini e pulsanti CAA per comunicare bisogni, emozioni e scelte.</p></article>
             <article class="activity-card"><strong>Per chi aiuta</strong><p>La piattaforma deve essere facile anche per genitori, educatori e adulti che non usano spesso il computer.</p></article>
             <article class="activity-card"><strong>Telefono e sito</strong><p>L'interfaccia è pensata per funzionare su computer, tablet e telefono, con pagine responsive e comandi chiari.</p></article>
             <article class="activity-card"><strong>Tecnologie</strong><p>Base web in HTML e JavaScript, servizi futuri in Python, giochi educativi esportabili da Unity e integrabili nella piattaforma.</p></article>
@@ -1110,6 +1223,12 @@ button {
             <button class="emotion" onclick="emotion('stanco')">😴<br>Stanco</button>
             <button class="emotion" onclick="emotion('aiuto')">🙋<br>Aiuto</button>
             <button class="emotion" onclick="emotion('pausa')">🍃<br>Pausa</button>
+            <button class="emotion" onclick="emotion('acqua')">💧<br>Acqua</button>
+            <button class="emotion" onclick="emotion('bagno')">🚻<br>Bagno</button>
+            <button class="emotion" onclick="emotion('dolore')">🩹<br>Dolore</button>
+            <button class="emotion" onclick="emotion('troppo')">🔇<br>Troppo rumore</button>
+            <button class="emotion" onclick="emotion('si')">✅<br>Sì</button>
+            <button class="emotion" onclick="emotion('no')">❌<br>No</button>
         </div>
     </section>
 
@@ -1197,6 +1316,19 @@ button {
     <div class="tiny-bot">🤖</div>
 </div>
 
+<div class="assist-panel" id="assistPanel" aria-live="polite">
+    <h3 class="assist-title">Guida Atchii</h3>
+    <div class="assist-content">
+        <div class="assist-icon" id="assistIcon">🤖</div>
+        <p class="assist-text" id="assistText">Scegli un'attività.</p>
+    </div>
+    <div class="assist-actions">
+        <button type="button" onclick="repeatAssist()">Ripeti</button>
+        <button type="button" onclick="showPage('communication')">CAA</button>
+        <button type="button" onclick="showPage('relax')">Pausa</button>
+    </div>
+</div>
+
 <script>
 const pages = document.querySelectorAll(".page");
 const bubble = document.getElementById("atchiiBubble");
@@ -1217,10 +1349,16 @@ const ATCHII_API_URL = window.ATCHII_API_URL || "http://127.0.0.1:5050/api/atchi
 const childNameInput = document.getElementById("childNameInput");
 const childAgeInput = document.getElementById("childAgeInput");
 const themeSelectInput = document.getElementById("themeSelectInput");
+const supportCognitiveInput = document.getElementById("supportCognitiveInput");
+const supportNonverbalInput = document.getElementById("supportNonverbalInput");
+const supportBlindInput = document.getElementById("supportBlindInput");
 const homeGreeting = document.getElementById("homeGreeting");
 const previewGreeting = document.getElementById("previewGreeting");
 const previewText = document.getElementById("previewText");
 const profileName = document.getElementById("profileName");
+const assistPanel = document.getElementById("assistPanel");
+const assistIcon = document.getElementById("assistIcon");
+const assistText = document.getElementById("assistText");
 
 let score = 0;
 let streak = 0;
@@ -1240,10 +1378,15 @@ let startPoint = null;
 let snapshot = null;
 let inactivityTimer;
 let clickCount = 0;
+let lastSpokenText = "";
+let lastSpokenAt = 0;
 let childProfile = {
     name: "",
     age: "",
-    theme: "blue"
+    theme: "blue",
+    supportCognitive: true,
+    supportNonverbal: false,
+    supportBlind: false
 };
 
 const rounds = [
@@ -1270,7 +1413,27 @@ const messages = {
     triste: "Va tutto bene, ti ascolto.",
     stanco: "Puoi riposarti un momento.",
     aiuto: "Chiedere aiuto va benissimo.",
-    pausa: "Facciamo una pausa tranquilla."
+    pausa: "Facciamo una pausa tranquilla.",
+    acqua: "Vorrei bere acqua.",
+    bagno: "Devo andare in bagno.",
+    dolore: "Ho dolore. Chiedo aiuto a un adulto.",
+    troppo: "C'è troppo rumore. Vorrei un posto più tranquillo.",
+    si: "Sì.",
+    no: "No."
+};
+
+const pageGuides = {
+    onboarding: { icon: "👤", text: "Scrivi un nome o soprannome, scegli l'età e seleziona i supporti utili." },
+    home: { icon: "🏠", text: "Scegli una grande card: giochi, disegno, Atchii AI, routine o progetto." },
+    games: { icon: "🎮", text: "Scegli un gioco. Nel platform usa frecce o A D, salta con spazio e risolvi le addizioni." },
+    draw: { icon: "✏️", text: "Scegli colore e strumento. Disegna sul foglio grande. Puoi anche usare il timbro Atchii." },
+    assistant: { icon: "🤖", text: "Scrivi ad Atchii o usa i pulsanti rapidi. Puoi chiedere gioco, disegno, relax o aiuto." },
+    communication: { icon: "💬", text: "Scegli un simbolo per dire come ti senti o cosa ti serve." },
+    routine: { icon: "🗓️", text: "Segui un passo alla volta. Spunta le caselle quando completi la routine." },
+    relax: { icon: "🍃", text: "Scegli respiro guidato o pausa calma. Atchii ti accompagna lentamente." },
+    settings: { icon: "⚙️", text: "Qui puoi cambiare tema, colore di Atchii, font, movimento e profilo iniziale." },
+    profile: { icon: "👤", text: "Qui vedi profilo locale, progressi e impostazioni principali." },
+    project: { icon: "🌐", text: "Qui trovi lo scopo del progetto Atchii e le tecnologie usate." }
 };
 
 function showPage(id) {
@@ -1291,6 +1454,7 @@ function showPage(id) {
     say(`Pagina ${names[id]}. Sono qui con te.`, false);
     if (id === "games") restartGame();
     if (id === "draw") resizeCanvasView();
+    guidePage(id);
 }
 
 function saveOnboarding(event) {
@@ -1299,9 +1463,17 @@ function saveOnboarding(event) {
     const age = childAgeInput.value ? String(Math.max(3, Math.min(99, Number(childAgeInput.value)))) : "";
     const theme = themeSelectInput.value || "blue";
 
-    childProfile = { name, age, theme };
+    childProfile = {
+        name,
+        age,
+        theme,
+        supportCognitive: supportCognitiveInput.checked,
+        supportNonverbal: supportNonverbalInput.checked,
+        supportBlind: supportBlindInput.checked
+    };
     localStorage.setItem("atchiiProfile", JSON.stringify(childProfile));
     applyProfile();
+    applyAccessibilitySupport();
     setTheme(theme, false);
     showPage("home");
 
@@ -1330,7 +1502,11 @@ function loadOnboarding() {
     childNameInput.value = childProfile.name || "";
     childAgeInput.value = childProfile.age || "";
     themeSelectInput.value = childProfile.theme || "blue";
+    supportCognitiveInput.checked = childProfile.supportCognitive !== false;
+    supportNonverbalInput.checked = !!childProfile.supportNonverbal;
+    supportBlindInput.checked = !!childProfile.supportBlind;
     applyProfile();
+    applyAccessibilitySupport();
     setTheme(childProfile.theme || "blue", false);
     showPage("home");
 }
@@ -1338,18 +1514,57 @@ function loadOnboarding() {
 function applyProfile() {
     const name = childProfile.name || "amico";
     const ageText = childProfile.age ? `, ${childProfile.age} anni` : "";
+    const supports = describeSupports();
     homeGreeting.textContent = `Ciao ${name}!`;
     previewGreeting.textContent = `Ciao ${name}!`;
     profileName.textContent = `👤 ${name}`;
-    profileTheme.textContent = `Profilo locale: ${name}${ageText}. Tema scelto: ${themeLabel(childProfile.theme)}.`;
+    profileTheme.textContent = `Profilo locale: ${name}${ageText}. Tema scelto: ${themeLabel(childProfile.theme)}. Supporti: ${supports}.`;
 }
 
 function resetOnboarding() {
     childNameInput.value = childProfile.name || "";
     childAgeInput.value = childProfile.age || "";
     themeSelectInput.value = childProfile.theme || "blue";
+    supportCognitiveInput.checked = childProfile.supportCognitive !== false;
+    supportNonverbalInput.checked = !!childProfile.supportNonverbal;
+    supportBlindInput.checked = !!childProfile.supportBlind;
     previewTheme(themeSelectInput.value);
     showPage("onboarding");
+}
+
+function applyAccessibilitySupport() {
+    document.body.classList.toggle("nonverbal-mode", !!childProfile.supportNonverbal);
+    document.body.classList.toggle("blind-mode", !!childProfile.supportBlind);
+    assistPanel.classList.toggle("active", !!childProfile.supportNonverbal || !!childProfile.supportBlind || !!childProfile.supportCognitive);
+}
+
+function describeSupports() {
+    const supports = [];
+    if (childProfile.supportCognitive !== false) supports.push("cognitivo");
+    if (childProfile.supportNonverbal) supports.push("non verbale/muto");
+    if (childProfile.supportBlind) supports.push("cieco/non vedente");
+    return supports.length ? supports.join(", ") : "base";
+}
+
+function guidePage(id) {
+    const guide = pageGuides[id];
+    if (!guide) return;
+    updateAssist(guide.text, guide.icon, childProfile.supportBlind);
+}
+
+function updateAssist(text, icon = "🤖", voice = false) {
+    assistIcon.textContent = icon;
+    assistText.textContent = text;
+    if (childProfile.supportNonverbal) {
+        bubble.textContent = `${icon} ${text}`;
+    }
+    if (voice || childProfile.supportBlind) {
+        speak(text);
+    }
+}
+
+function repeatAssist() {
+    updateAssist(assistText.textContent, assistIcon.textContent, true);
 }
 
 function selectThemeCard(theme) {
@@ -1378,11 +1593,30 @@ function themeLabel(theme) {
 
 function say(text, voice = true) {
     bubble.textContent = text;
-    if (voice) speak(text);
+    if (childProfile.supportNonverbal) {
+        assistText.textContent = text;
+        assistIcon.textContent = chooseAssistIcon(text);
+    }
+    if (voice || childProfile.supportBlind) speak(text);
+}
+
+function chooseAssistIcon(text) {
+    const lowered = text.toLowerCase();
+    if (lowered.includes("gioco") || lowered.includes("platform")) return "🎮";
+    if (lowered.includes("disegn") || lowered.includes("colore")) return "✏️";
+    if (lowered.includes("respiro") || lowered.includes("calma") || lowered.includes("pausa")) return "🍃";
+    if (lowered.includes("routine")) return "🗓️";
+    if (lowered.includes("aiuto") || lowered.includes("adulto")) return "🙋";
+    if (lowered.includes("porta") || lowered.includes("addizione") || lowered.includes("somma")) return "➕";
+    return "🤖";
 }
 
 function speak(text) {
     if (!("speechSynthesis" in window)) return;
+    const now = Date.now();
+    if (text === lastSpokenText && now - lastSpokenAt < 1200) return;
+    lastSpokenText = text;
+    lastSpokenAt = now;
     window.speechSynthesis.cancel();
     const voice = new SpeechSynthesisUtterance(text);
     voice.lang = "it-IT";
@@ -1450,6 +1684,13 @@ function setGame(mode) {
     document.querySelectorAll(".game-tabs button").forEach(button => button.classList.remove("active"));
     document.getElementById(`tab-${mode}`).classList.add("active");
     restartGame();
+    const labels = {
+        shapes: "Gioco forme e colori. Scegli la forma richiesta.",
+        memory: "Gioco memory. Trova le coppie uguali.",
+        count: "Gioco conta. Conta i robot e scegli il numero.",
+        platform: "Platform addizioni. Vai avanti, salta e risolvi le somme alle porte."
+    };
+    updateAssist(labels[mode] || "Gioco selezionato.", "🎮", childProfile.supportBlind);
 }
 
 function restartGame() {
@@ -1713,6 +1954,7 @@ function updatePlatform() {
         if (!coin.taken && circleRectOverlap(coin.x, coin.y, 15, player)) {
             coin.taken = true;
             addScore(2);
+            updateAssist("Moneta raccolta.", "🟡", false);
             say("Moneta presa.", false);
         }
     });
@@ -1828,6 +2070,7 @@ function openPlatformQuestion(gate) {
     state.questionText.textContent = `${gate.a} + ${gate.b} = ?`;
     state.answerInput.value = "";
     state.answerInput.focus();
+    updateAssist(`Porta chiusa. Risolvi: ${gate.a} più ${gate.b}.`, "➕", childProfile.supportBlind);
     say(`Quanto fa ${gate.a} più ${gate.b}?`);
 }
 
@@ -2211,6 +2454,17 @@ document.addEventListener("keydown", event => {
 
 document.addEventListener("keyup", event => {
     platformKeys[event.code] = false;
+});
+
+document.addEventListener("focusin", event => {
+    if (!childProfile.supportBlind) return;
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const label = target.getAttribute("aria-label") || target.innerText || target.placeholder || target.name || "";
+    const cleanLabel = label.replace(/\s+/g, " ").trim();
+    if (cleanLabel) {
+        speak(cleanLabel.slice(0, 120));
+    }
 });
 
 updateClock();
