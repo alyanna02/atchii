@@ -62,6 +62,117 @@ button {
     display: block;
 }
 
+.onboarding {
+    min-height: 680px;
+    display: none;
+    grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+    gap: 22px;
+    align-items: stretch;
+}
+
+.onboarding.active {
+    display: grid;
+}
+
+.onboarding-form,
+.theme-preview {
+    padding: 24px;
+    border-radius: 24px;
+    background: var(--panel-strong);
+    box-shadow: 0 14px 25px rgba(59, 126, 181, 0.12);
+}
+
+.onboarding-form h1 {
+    margin: 0 0 10px;
+    font-size: clamp(34px, 5vw, 54px);
+}
+
+.onboarding-form p {
+    color: var(--muted);
+    font-size: 18px;
+}
+
+.onboarding-form label {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0;
+    font-weight: 700;
+}
+
+.onboarding-form input,
+.onboarding-form select {
+    min-height: 52px;
+    padding: 0 14px;
+    border: 1px solid rgba(80, 132, 180, 0.18);
+    border-radius: 16px;
+    background: #fff;
+}
+
+.privacy-note {
+    padding: 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--bot-accent) 10%, white);
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.theme-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.theme-choice {
+    min-height: 82px;
+    padding: 12px;
+    border: 2px solid transparent;
+    border-radius: 18px;
+    background: #fff;
+    text-align: left;
+}
+
+.theme-choice.active {
+    border-color: var(--bot-accent);
+}
+
+.theme-swatch {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.theme-swatch span {
+    height: 18px;
+    border-radius: 8px;
+}
+
+.preview-screen {
+    min-height: 430px;
+    padding: 20px;
+    border-radius: 24px;
+    background:
+        linear-gradient(145deg, rgba(255,255,255,0.82), rgba(222,242,255,0.68)),
+        radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--bot-accent) 26%, transparent), transparent 34%);
+}
+
+.preview-card-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.preview-mini-card {
+    min-height: 94px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.78);
+    text-align: center;
+}
+
 .hero {
     min-height: 560px;
     background:
@@ -739,7 +850,7 @@ button {
 }
 
 @media (max-width: 900px) {
-    .hero-main, .game-board, .draw-layout {
+    .hero-main, .game-board, .draw-layout, .onboarding {
         grid-template-columns: 1fr;
     }
 
@@ -761,7 +872,71 @@ button {
 </head>
 <body>
 <main class="app-shell">
-    <section id="home" class="page hero active" aria-label="Home Atchii">
+    <section id="onboarding" class="page onboarding active" aria-label="Ingresso Atchii">
+        <form class="onboarding-form" onsubmit="saveOnboarding(event)">
+            <h1>Benvenuto in Atchii</h1>
+            <p>Prima di iniziare scegliamo un profilo semplice e un tema comodo da vedere.</p>
+
+            <label>Nome o soprannome
+                <input id="childNameInput" type="text" maxlength="30" autocomplete="off" placeholder="Es. Alex">
+            </label>
+
+            <label>Età
+                <input id="childAgeInput" type="number" min="3" max="99" inputmode="numeric" placeholder="Es. 10">
+            </label>
+
+            <label>Tema del sito
+                <select id="themeSelectInput" onchange="previewTheme(this.value)">
+                    <option value="blue">Calm Blue</option>
+                    <option value="pink">Soft Pink</option>
+                    <option value="focus">Focus Mode</option>
+                    <option value="contrast">High Contrast</option>
+                </select>
+            </label>
+
+            <div class="theme-choice-grid" aria-label="Anteprime tema">
+                <button type="button" class="theme-choice active" data-theme-card="blue" onclick="selectThemeCard('blue')">Calm Blue<div class="theme-swatch"><span style="background:#4aa6f2"></span><span style="background:#d8efff"></span><span style="background:#fff"></span></div></button>
+                <button type="button" class="theme-choice" data-theme-card="pink" onclick="selectThemeCard('pink')">Soft Pink<div class="theme-swatch"><span style="background:#f28caf"></span><span style="background:#ffe1eb"></span><span style="background:#fff7eb"></span></div></button>
+                <button type="button" class="theme-choice" data-theme-card="focus" onclick="selectThemeCard('focus')">Focus<div class="theme-swatch"><span style="background:#081522"></span><span style="background:#55c7ff"></span><span style="background:#17364d"></span></div></button>
+                <button type="button" class="theme-choice" data-theme-card="contrast" onclick="selectThemeCard('contrast')">Contrasto<div class="theme-swatch"><span style="background:#000"></span><span style="background:#fff600"></span><span style="background:#00c8ff"></span></div></button>
+            </div>
+
+            <p class="privacy-note">Questi dati restano salvati solo in questo browser. Non vengono inviati ad Atchii AI o a OpenAI.</p>
+            <button class="soft-button" type="submit">Entra in Atchii</button>
+        </form>
+
+        <div class="theme-preview">
+            <h2>Anteprima</h2>
+            <div class="preview-screen">
+                <div class="mascot happy" aria-hidden="true">
+                    <span class="antenna left"></span>
+                    <span class="antenna right"></span>
+                    <span class="ear left"></span>
+                    <span class="ear right"></span>
+                    <span class="arm left"></span>
+                    <span class="arm right"></span>
+                    <span class="mascot-body"></span>
+                    <span class="foot left"></span>
+                    <span class="foot right"></span>
+                    <span class="mascot-head"></span>
+                    <span class="mascot-screen">
+                        <span class="eye left"></span>
+                        <span class="eye right"></span>
+                        <span class="mouth"></span>
+                    </span>
+                </div>
+                <h2 id="previewGreeting">Ciao!</h2>
+                <p id="previewText">Atchii userà colori morbidi e pulsanti grandi.</p>
+                <div class="preview-card-row">
+                    <div class="preview-mini-card">Giochi</div>
+                    <div class="preview-mini-card">Disegno</div>
+                    <div class="preview-mini-card">AI</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="home" class="page hero" aria-label="Home Atchii">
         <div class="topbar">
             <button class="icon-button" onclick="showPage('settings')" aria-label="Apri impostazioni">☰</button>
             <div class="clock-card">
@@ -791,7 +966,7 @@ button {
             </div>
 
             <div class="greeting">
-                <h1>Ciao Alex!</h1>
+                <h1 id="homeGreeting">Ciao!</h1>
                 <p id="subtitle">Una piattaforma accessibile per autonomia, gioco e apprendimento.</p>
                 <button class="feeling-chip" onclick="showPage('assistant')">Parla con Atchii <span>🤖</span></button>
             </div>
@@ -969,6 +1144,9 @@ button {
             <button class="back-button" onclick="showPage('home')">← Home</button>
         </div>
         <div class="settings-row">
+            <label>Profilo iniziale
+                <button class="soft-button" type="button" onclick="resetOnboarding()">Modifica nome, eta e tema</button>
+            </label>
             <label>Tema colori
                 <select onchange="setTheme(this.value)">
                     <option value="blue">Calm Blue</option>
@@ -1007,7 +1185,7 @@ button {
             <button class="back-button" onclick="showPage('home')">← Home</button>
         </div>
         <div class="card-grid">
-            <article class="activity-card"><strong>👤 Alex</strong><p id="profileTheme">Tema preferito: Calm Blue. Atchii blu.</p></article>
+            <article class="activity-card"><strong id="profileName">👤 Profilo</strong><p id="profileTheme">Tema preferito: Calm Blue. Atchii blu.</p></article>
             <article class="activity-card"><strong>⭐ Progressi</strong><p id="profileProgress">Punti gioco: 0. Serie migliore: 0.</p></article>
             <article class="activity-card"><strong>🤖 Atchii</strong><p>Assistente accessibile con chat, voce, giochi, disegno, routine e supporto per chi usa poco il PC.</p></article>
         </div>
@@ -1036,6 +1214,13 @@ const chatInput = document.getElementById("chatInput");
 const canvas = document.getElementById("drawCanvas");
 const ctx = canvas.getContext("2d");
 const ATCHII_API_URL = window.ATCHII_API_URL || "http://127.0.0.1:5050/api/atchii";
+const childNameInput = document.getElementById("childNameInput");
+const childAgeInput = document.getElementById("childAgeInput");
+const themeSelectInput = document.getElementById("themeSelectInput");
+const homeGreeting = document.getElementById("homeGreeting");
+const previewGreeting = document.getElementById("previewGreeting");
+const previewText = document.getElementById("previewText");
+const profileName = document.getElementById("profileName");
 
 let score = 0;
 let streak = 0;
@@ -1055,6 +1240,11 @@ let startPoint = null;
 let snapshot = null;
 let inactivityTimer;
 let clickCount = 0;
+let childProfile = {
+    name: "",
+    age: "",
+    theme: "blue"
+};
 
 const rounds = [
     { shape: "circle", color: "blue", label: "cerchio blu" },
@@ -1086,6 +1276,7 @@ const messages = {
 function showPage(id) {
     pages.forEach(page => page.classList.toggle("active", page.id === id));
     const names = {
+        onboarding: "Ingresso",
         home: "Home",
         games: "Giochi",
         draw: "Disegno",
@@ -1100,6 +1291,89 @@ function showPage(id) {
     say(`Pagina ${names[id]}. Sono qui con te.`, false);
     if (id === "games") restartGame();
     if (id === "draw") resizeCanvasView();
+}
+
+function saveOnboarding(event) {
+    event.preventDefault();
+    const name = childNameInput.value.trim().slice(0, 30) || "amico";
+    const age = childAgeInput.value ? String(Math.max(3, Math.min(99, Number(childAgeInput.value)))) : "";
+    const theme = themeSelectInput.value || "blue";
+
+    childProfile = { name, age, theme };
+    localStorage.setItem("atchiiProfile", JSON.stringify(childProfile));
+    applyProfile();
+    setTheme(theme, false);
+    showPage("home");
+
+    if (age && Number(age) < 14) {
+        say(`Ciao ${name}. Ricorda: se hai bisogno, chiedi sempre aiuto a un adulto di fiducia.`);
+    } else {
+        say(`Ciao ${name}. Sono Atchii, iniziamo con calma.`);
+    }
+}
+
+function loadOnboarding() {
+    const saved = localStorage.getItem("atchiiProfile");
+    if (!saved) {
+        previewTheme("blue");
+        showPage("onboarding");
+        return;
+    }
+
+    try {
+        childProfile = { ...childProfile, ...JSON.parse(saved) };
+    } catch (error) {
+        showPage("onboarding");
+        return;
+    }
+
+    childNameInput.value = childProfile.name || "";
+    childAgeInput.value = childProfile.age || "";
+    themeSelectInput.value = childProfile.theme || "blue";
+    applyProfile();
+    setTheme(childProfile.theme || "blue", false);
+    showPage("home");
+}
+
+function applyProfile() {
+    const name = childProfile.name || "amico";
+    const ageText = childProfile.age ? `, ${childProfile.age} anni` : "";
+    homeGreeting.textContent = `Ciao ${name}!`;
+    previewGreeting.textContent = `Ciao ${name}!`;
+    profileName.textContent = `👤 ${name}`;
+    profileTheme.textContent = `Profilo locale: ${name}${ageText}. Tema scelto: ${themeLabel(childProfile.theme)}.`;
+}
+
+function resetOnboarding() {
+    childNameInput.value = childProfile.name || "";
+    childAgeInput.value = childProfile.age || "";
+    themeSelectInput.value = childProfile.theme || "blue";
+    previewTheme(themeSelectInput.value);
+    showPage("onboarding");
+}
+
+function selectThemeCard(theme) {
+    themeSelectInput.value = theme;
+    previewTheme(theme);
+}
+
+function previewTheme(theme) {
+    childProfile.theme = theme;
+    document.querySelectorAll(".theme-choice").forEach(card => {
+        card.classList.toggle("active", card.dataset.themeCard === theme);
+    });
+    setTheme(theme, false);
+    previewText.textContent = `Anteprima ${themeLabel(theme)}: colori, mascotte e pulsanti si aggiornano subito.`;
+}
+
+function themeLabel(theme) {
+    const labels = {
+        blue: "Calm Blue",
+        pink: "Soft Pink",
+        focus: "Focus Mode",
+        contrast: "High Contrast"
+    };
+    return labels[theme] || "Calm Blue";
 }
 
 function say(text, voice = true) {
@@ -1125,7 +1399,7 @@ function setMascot(state) {
     mascot.className = `mascot ${state}`;
 }
 
-function setTheme(theme) {
+function setTheme(theme, announce = true) {
     document.body.classList.remove("pink-theme", "focus-theme", "contrast-theme");
     const defaults = {
         blue: "#4aa6f2",
@@ -1137,7 +1411,11 @@ function setTheme(theme) {
     if (theme === "focus") document.body.classList.add("focus-theme");
     if (theme === "contrast") document.body.classList.add("contrast-theme");
     setBotColor(defaults[theme] || defaults.blue);
-    say("Tema aggiornato. Anche Atchii ha cambiato colore.");
+    childProfile.theme = theme || "blue";
+    if (announce && childProfile.name) {
+        localStorage.setItem("atchiiProfile", JSON.stringify(childProfile));
+    }
+    if (announce) say("Tema aggiornato. Anche Atchii ha cambiato colore.");
 }
 
 function setBotColor(color) {
@@ -1145,7 +1423,9 @@ function setBotColor(color) {
     document.documentElement.style.setProperty("--bot-soft", mixWithWhite(color, 0.78));
     document.getElementById("botColor").value = color;
     document.getElementById("drawColor").value = color;
-    profileTheme.textContent = `Tema preferito aggiornato. Atchii colore ${colorNames[color] || color}.`;
+    const name = childProfile.name || "Profilo";
+    const ageText = childProfile.age ? `, ${childProfile.age} anni` : "";
+    profileTheme.textContent = `${name}${ageText}. Tema: ${themeLabel(childProfile.theme)}. Atchii colore ${colorNames[color] || color}.`;
 }
 
 function mixWithWhite(hex, amount) {
@@ -1935,9 +2215,9 @@ document.addEventListener("keyup", event => {
 
 updateClock();
 setInterval(updateClock, 30000);
-setBotColor("#4aa6f2");
 restartGame();
 addChat("Ciao! Sono Atchii. Scrivimi: gioco, disegno, relax, routine, progetto, Unity, telefono o aiuto.", "bot");
+loadOnboarding();
 </script>
 </body>
 </html>
