@@ -376,78 +376,149 @@ button {
 
 .mascot {
     position: relative;
-    width: 190px;
-    height: 218px;
+    width: 204px;
+    height: 226px;
     margin: auto;
     filter: drop-shadow(0 22px 22px rgba(44, 118, 185, 0.18));
 }
 
 .mascot-body {
     position: absolute;
-    left: 33px;
-    bottom: 8px;
-    width: 122px;
-    height: 118px;
-    border-radius: 54% 54% 46% 46%;
-    background: linear-gradient(145deg, #fff 0%, var(--bot-soft) 100%);
-    box-shadow: inset -10px -14px 20px color-mix(in srgb, var(--bot-accent) 22%, transparent);
+    left: 39px;
+    bottom: 6px;
+    width: 126px;
+    height: 116px;
+    border-radius: 44% 44% 36% 36%;
+    background:
+        radial-gradient(circle at 50% 25%, rgba(255,255,255,0.95), transparent 34%),
+        linear-gradient(145deg, #fff 0%, var(--bot-soft) 100%);
+    box-shadow:
+        inset -10px -14px 20px color-mix(in srgb, var(--bot-accent) 20%, transparent),
+        inset 0 0 0 3px rgba(255,255,255,0.64);
 }
 
 .mascot-head {
     position: absolute;
     left: 18px;
-    top: 26px;
-    width: 152px;
-    height: 112px;
-    border-radius: 52px;
-    background: linear-gradient(145deg, #fff 0%, var(--bot-soft) 88%);
+    top: 20px;
+    width: 168px;
+    height: 124px;
+    border-radius: 58px;
+    background:
+        radial-gradient(circle at 32% 20%, rgba(255,255,255,0.98), transparent 30%),
+        linear-gradient(145deg, #fff 0%, var(--bot-soft) 88%);
+    box-shadow:
+        inset -12px -13px 20px color-mix(in srgb, var(--bot-accent) 12%, transparent),
+        inset 0 0 0 3px rgba(255,255,255,0.72);
+}
+
+.mascot-head::after {
+    content: "";
+    position: absolute;
+    left: 24px;
+    top: 16px;
+    width: 34px;
+    height: 13px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.9);
+    transform: rotate(-18deg);
 }
 
 .mascot-screen {
     position: absolute;
-    left: 36px;
-    top: 48px;
-    width: 116px;
-    height: 72px;
-    border-radius: 29px;
-    background: #07131d;
-    box-shadow: inset 0 -8px 18px color-mix(in srgb, var(--bot-accent) 38%, transparent);
+    left: 37px;
+    top: 47px;
+    width: 130px;
+    height: 82px;
+    border-radius: 34px;
+    background:
+        radial-gradient(circle at 50% 110%, color-mix(in srgb, var(--bot-accent) 22%, transparent), transparent 52%),
+        #07131d;
+    box-shadow:
+        inset 0 -9px 18px color-mix(in srgb, var(--bot-accent) 34%, transparent),
+        0 0 0 5px rgba(255,255,255,0.72);
+}
+
+.mascot-screen::before,
+.mascot-screen::after {
+    content: "";
+    position: absolute;
+    top: 47px;
+    width: 15px;
+    height: 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bot-accent) 45%, #ffc0d6);
+    opacity: 0.9;
+}
+
+.mascot-screen::before { left: 22px; }
+.mascot-screen::after { right: 22px; }
+
+.mascot::before,
+.mascot::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,0.9);
+    transform: rotate(28deg);
+    opacity: 0.92;
+}
+
+.mascot::before {
+    right: 23px;
+    top: 31px;
+}
+
+.mascot::after {
+    left: 26px;
+    top: 148px;
+    width: 8px;
+    height: 8px;
 }
 
 .eye {
     position: absolute;
-    top: 24px;
-    width: 15px;
-    height: 22px;
+    top: 22px;
+    width: 18px;
+    height: 24px;
     border-radius: 99px;
-    background: var(--bot-accent);
-    box-shadow: 0 0 12px color-mix(in srgb, var(--bot-accent) 82%, white);
+    background:
+        radial-gradient(circle at 35% 28%, #fff 0 14%, transparent 16%),
+        var(--bot-accent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--bot-accent) 84%, white);
 }
 
-.eye.left { left: 30px; }
-.eye.right { right: 30px; }
+.eye.left { left: 32px; }
+.eye.right { right: 32px; }
 
 .mouth {
     position: absolute;
-    left: 48px;
-    top: 45px;
-    width: 22px;
-    height: 12px;
-    border-bottom: 4px solid color-mix(in srgb, var(--bot-accent) 70%, white);
+    left: 50px;
+    top: 46px;
+    width: 30px;
+    height: 16px;
+    border-bottom: 5px solid color-mix(in srgb, var(--bot-accent) 74%, white);
     border-radius: 0 0 99px 99px;
 }
 
 .ear {
     position: absolute;
-    top: 64px;
-    width: 22px;
-    height: 48px;
+    top: 66px;
+    width: 25px;
+    height: 52px;
     border-radius: 99px;
-    background: linear-gradient(#fff, var(--bot-accent));
+    background:
+        radial-gradient(circle at 50% 22%, rgba(255,255,255,0.85), transparent 30%),
+        linear-gradient(#fff, var(--bot-accent));
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.55);
 }
 
-.ear.left { left: 0; }
-.ear.right { right: 0; }
+.ear.left { left: 1px; }
+.ear.right { right: 1px; }
 
 .antenna {
     position: absolute;
@@ -463,15 +534,17 @@ button {
     position: absolute;
     top: -7px;
     left: -5px;
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: #fff;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--bot-accent) 35%, transparent);
+    box-shadow:
+        0 0 0 3px color-mix(in srgb, var(--bot-accent) 35%, transparent),
+        0 0 14px color-mix(in srgb, var(--bot-accent) 40%, transparent);
 }
 
-.antenna.left { left: 58px; transform: rotate(-15deg); }
-.antenna.right { right: 58px; transform: rotate(15deg); }
+.antenna.left { left: 63px; transform: rotate(-14deg); }
+.antenna.right { right: 63px; transform: rotate(14deg); }
 
 .arm {
     position: absolute;
@@ -498,9 +571,9 @@ button {
 .foot.right { right: 48px; }
 
 .mascot.happy { animation: float 3s ease-in-out infinite; }
-.mascot.calm .eye { height: 5px; top: 33px; }
+.mascot.calm .eye { height: 6px; top: 33px; }
 .mascot.proud .mascot-screen { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 36%, transparent), inset 0 -8px 18px color-mix(in srgb, var(--bot-accent) 38%, transparent); }
-.mascot.sad .mouth { top: 54px; transform: rotate(180deg); }
+.mascot.sad .mouth { top: 56px; transform: rotate(180deg); }
 
 .tile-grid {
     display: grid;
@@ -685,6 +758,31 @@ button {
     border-radius: 18px;
     background: rgba(255,255,255,0.86);
     font-size: 30px;
+}
+
+.emotion-game-grid,
+.sequence-game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+}
+
+.emotion-choice,
+.sequence-choice {
+    min-height: 130px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.9);
+    color: var(--text);
+    box-shadow: 0 12px 24px rgba(50, 117, 176, 0.12);
+    font-size: 20px;
+}
+
+.emotion-choice span,
+.sequence-choice span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 42px;
 }
 
 .platform-wrap {
@@ -882,11 +980,39 @@ button {
     width: 74px;
     height: 74px;
     border-radius: 50%;
-    background: linear-gradient(145deg, #fff, var(--bot-soft));
-    display: grid;
-    place-items: center;
+    position: relative;
+    flex: 0 0 auto;
+    background:
+        radial-gradient(circle at 34% 22%, rgba(255,255,255,0.95), transparent 28%),
+        linear-gradient(145deg, #fff, var(--bot-soft));
     box-shadow: var(--shadow);
-    font-size: 36px;
+    font-size: 0;
+}
+
+.bubble .tiny-bot::before {
+    content: "";
+    position: absolute;
+    left: 13px;
+    top: 19px;
+    width: 48px;
+    height: 34px;
+    border-radius: 17px;
+    background: #07131d;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.74);
+}
+
+.bubble .tiny-bot::after {
+    content: "";
+    position: absolute;
+    left: 25px;
+    top: 30px;
+    width: 8px;
+    height: 10px;
+    border-radius: 99px;
+    background: var(--bot-accent);
+    box-shadow:
+        18px 0 0 var(--bot-accent),
+        9px 14px 0 -2px color-mix(in srgb, var(--bot-accent) 70%, white);
 }
 
 .bubble-text {
@@ -1124,7 +1250,9 @@ button {
             <button id="tab-shapes" class="active" onclick="setGame('shapes')">Forme e colori</button>
             <button id="tab-memory" onclick="setGame('memory')">Memory</button>
             <button id="tab-count" onclick="setGame('count')">Conta</button>
-            <button id="tab-platform" onclick="setGame('platform')">Platform addizioni</button>
+            <button id="tab-emotions" onclick="setGame('emotions')">Emozioni</button>
+            <button id="tab-sequence" onclick="setGame('sequence')">Sequenze</button>
+            <button id="tab-platform" onclick="setGame('platform')">Platform somme</button>
         </div>
         <div class="game-board">
             <div class="game-stage">
@@ -1370,6 +1498,8 @@ let memoryFirst = null;
 let memoryLock = false;
 let memoryMatches = 0;
 let countAnswer = 0;
+let emotionTarget = null;
+let sequenceStep = 0;
 let platformAnimation = null;
 let platformState = null;
 let platformKeys = {};
@@ -1396,6 +1526,39 @@ const rounds = [
     { shape: "circle", color: "yellow", label: "cerchio giallo" },
     { shape: "square", color: "purple", label: "quadrato viola" },
     { shape: "triangle", color: "orange", label: "triangolo arancione" }
+];
+
+const emotionRounds = [
+    { prompt: "Atchii riceve un complimento. Come si sente?", answer: "felice", icon: "😊" },
+    { prompt: "C'è troppo rumore. Cosa può sentire?", answer: "fastidio", icon: "🔇" },
+    { prompt: "Atchii ha bisogno di una pausa. Come può sentirsi?", answer: "stanco", icon: "😴" },
+    { prompt: "Atchii non capisce cosa fare. Cosa può chiedere?", answer: "aiuto", icon: "🙋" }
+];
+
+const emotionChoices = [
+    { key: "felice", label: "Felice", icon: "😊" },
+    { key: "fastidio", label: "Troppo rumore", icon: "🔇" },
+    { key: "stanco", label: "Stanco", icon: "😴" },
+    { key: "aiuto", label: "Aiuto", icon: "🙋" }
+];
+
+const sequenceRounds = [
+    {
+        title: "Prepararsi per uscire",
+        steps: [
+            { key: "scarpe", label: "Metto le scarpe", icon: "👟" },
+            { key: "giacca", label: "Metto la giacca", icon: "🧥" },
+            { key: "porta", label: "Esco con un adulto", icon: "🚪" }
+        ]
+    },
+    {
+        title: "Pausa calma",
+        steps: [
+            { key: "siedo", label: "Mi siedo", icon: "🪑" },
+            { key: "respiro", label: "Respiro piano", icon: "🍃" },
+            { key: "riparto", label: "Ricomincio", icon: "✅" }
+        ]
+    }
 ];
 
 const colorNames = {
@@ -1425,7 +1588,7 @@ const messages = {
 const pageGuides = {
     onboarding: { icon: "👤", text: "Scrivi un nome o soprannome, scegli l'età e seleziona i supporti utili." },
     home: { icon: "🏠", text: "Scegli una grande card: giochi, disegno, Atchii AI, routine o progetto." },
-    games: { icon: "🎮", text: "Scegli un gioco. Nel platform usa frecce o A D, salta con spazio e risolvi le addizioni." },
+    games: { icon: "🎮", text: "Scegli un gioco. Nel platform usa frecce o A D, salta con spazio e risolvi somme e sottrazioni." },
     draw: { icon: "✏️", text: "Scegli colore e strumento. Disegna sul foglio grande. Puoi anche usare il timbro Atchii." },
     assistant: { icon: "🤖", text: "Scrivi ad Atchii o usa i pulsanti rapidi. Puoi chiedere gioco, disegno, relax o aiuto." },
     communication: { icon: "💬", text: "Scegli un simbolo per dire come ti senti o cosa ti serve." },
@@ -1688,7 +1851,9 @@ function setGame(mode) {
         shapes: "Gioco forme e colori. Scegli la forma richiesta.",
         memory: "Gioco memory. Trova le coppie uguali.",
         count: "Gioco conta. Conta i robot e scegli il numero.",
-        platform: "Platform addizioni. Vai avanti, salta e risolvi le somme alle porte."
+        emotions: "Gioco emozioni. Leggi la situazione e scegli il simbolo giusto.",
+        sequence: "Gioco sequenze. Metti in ordine i passaggi della routine.",
+        platform: "Platform somme e sottrazioni. Vai avanti, salta e risolvi le operazioni alle porte."
     };
     updateAssist(labels[mode] || "Gioco selezionato.", "🎮", childProfile.supportBlind);
 }
@@ -1698,6 +1863,8 @@ function restartGame() {
     if (gameMode === "shapes") newShapeRound();
     if (gameMode === "memory") newMemoryGame();
     if (gameMode === "count") newCountRound();
+    if (gameMode === "emotions") newEmotionGame();
+    if (gameMode === "sequence") newSequenceGame();
     if (gameMode === "platform") newPlatformGame();
 }
 
@@ -1849,9 +2016,78 @@ function chooseCount(number) {
     }
 }
 
+function newEmotionGame() {
+    emotionTarget = emotionRounds[Math.floor(Math.random() * emotionRounds.length)];
+    targetText.textContent = emotionTarget.prompt;
+    gameHint.textContent = "Guarda il simbolo e scegli l'emozione o il bisogno più adatto.";
+    gameArea.className = "emotion-game-grid";
+    gameArea.innerHTML = "";
+    shuffle([...emotionChoices]).forEach(choice => {
+        const button = document.createElement("button");
+        button.className = "emotion-choice";
+        button.innerHTML = `<span>${choice.icon}</span>${choice.label}`;
+        button.onclick = () => chooseEmotionGame(choice.key);
+        gameArea.appendChild(button);
+    });
+    updateAssist(emotionTarget.prompt, emotionTarget.icon, childProfile.supportBlind);
+}
+
+function chooseEmotionGame(key) {
+    if (key === emotionTarget.answer) {
+        addScore(10);
+        setMascot("proud");
+        say("Giusto. Hai riconosciuto bene la situazione.");
+        setTimeout(newEmotionGame, 900);
+    } else {
+        missScore();
+        setMascot("calm");
+        say("Riproviamo. Guarda la situazione e scegli con calma.");
+    }
+}
+
+function newSequenceGame() {
+    const round = sequenceRounds[Math.floor(Math.random() * sequenceRounds.length)];
+    sequenceStep = 0;
+    currentTarget = round;
+    targetText.textContent = round.title;
+    gameHint.textContent = "Scegli il primo passo, poi il secondo, poi il terzo.";
+    gameArea.className = "sequence-game-grid";
+    gameArea.innerHTML = "";
+    shuffle([...round.steps]).forEach(step => {
+        const button = document.createElement("button");
+        button.className = "sequence-choice";
+        button.dataset.key = step.key;
+        button.innerHTML = `<span>${step.icon}</span>${step.label}`;
+        button.onclick = () => chooseSequenceStep(step, button);
+        gameArea.appendChild(button);
+    });
+    updateAssist(`Sequenza: ${round.title}. Scegli il primo passo.`, "🗓️", childProfile.supportBlind);
+}
+
+function chooseSequenceStep(step, button) {
+    const expected = currentTarget.steps[sequenceStep];
+    if (step.key === expected.key) {
+        button.disabled = true;
+        button.style.opacity = "0.55";
+        sequenceStep++;
+        addScore(8);
+        if (sequenceStep >= currentTarget.steps.length) {
+            setMascot("proud");
+            say("Sequenza completata. Ottimo lavoro.");
+            setTimeout(newSequenceGame, 1100);
+        } else {
+            say(`Bene. Ora scegli: ${currentTarget.steps[sequenceStep].label}.`);
+        }
+    } else {
+        missScore();
+        setMascot("calm");
+        say(`Prima viene: ${expected.label}. Proviamo insieme.`);
+    }
+}
+
 function newPlatformGame() {
-    targetText.textContent = "Super Atchii: risolvi le addizioni";
-    gameHint.textContent = "Muoviti con frecce o A D. Salta con spazio. Davanti alla porta scrivi il risultato.";
+    targetText.textContent = "Super Atchii: somme e sottrazioni";
+    gameHint.textContent = "Muoviti con frecce o A D. Salta con spazio. Risolvi le porte per continuare.";
     gameArea.className = "platform-wrap";
     gameArea.innerHTML = `
         <canvas id="platformCanvas" width="960" height="430"></canvas>
@@ -1868,34 +2104,42 @@ function newPlatformGame() {
         questionBox: document.getElementById("mathAnswerBox"),
         questionText: document.getElementById("platformQuestion"),
         answerInput: document.getElementById("platformAnswer"),
-        gravity: 0.72,
+        gravity: 0.58,
+        maxSpeed: 5.3,
+        acceleration: 0.62,
+        friction: 0.82,
         cameraX: 0,
+        frame: 0,
         lockedGate: null,
         won: false,
-        player: { x: 44, y: 292, w: 34, h: 48, vx: 0, vy: 0, grounded: false },
+        player: { x: 44, y: 292, w: 36, h: 50, vx: 0, vy: 0, grounded: false, lastGrounded: 0 },
         platforms: [
-            { x: 0, y: 370, w: 360, h: 60 },
-            { x: 430, y: 330, w: 220, h: 40 },
-            { x: 720, y: 285, w: 220, h: 40 },
-            { x: 1030, y: 340, w: 300, h: 50 },
-            { x: 1410, y: 300, w: 260, h: 45 },
-            { x: 1760, y: 370, w: 360, h: 60 }
+            { x: 0, y: 370, w: 380, h: 60 },
+            { x: 430, y: 330, w: 240, h: 42 },
+            { x: 760, y: 290, w: 240, h: 42 },
+            { x: 1080, y: 345, w: 310, h: 50 },
+            { x: 1480, y: 305, w: 270, h: 45 },
+            { x: 1840, y: 350, w: 330, h: 50 },
+            { x: 2240, y: 370, w: 360, h: 60 }
         ],
         coins: [
             { x: 180, y: 315, taken: false },
-            { x: 510, y: 280, taken: false },
-            { x: 820, y: 235, taken: false },
-            { x: 1510, y: 250, taken: false }
+            { x: 525, y: 275, taken: false },
+            { x: 855, y: 236, taken: false },
+            { x: 1190, y: 300, taken: false },
+            { x: 1580, y: 255, taken: false },
+            { x: 1940, y: 305, taken: false }
         ],
         gates: [
-            { x: 350, y: 300, w: 44, h: 70, a: 2, b: 3, open: false },
-            { x: 955, y: 215, w: 44, h: 70, a: 4, b: 5, open: false },
-            { x: 1688, y: 230, w: 44, h: 70, a: 7, b: 2, open: false }
+            { x: 390, y: 260, w: 48, h: 110, a: 2, b: 3, op: "+", open: false },
+            { x: 1018, y: 220, w: 48, h: 70, a: 9, b: 4, op: "-", open: false },
+            { x: 1768, y: 235, w: 48, h: 70, a: 6, b: 2, op: "+", open: false },
+            { x: 2185, y: 280, w: 48, h: 70, a: 10, b: 3, op: "-", open: false }
         ],
-        flag: { x: 1960, y: 270, w: 36, h: 100 }
+        flag: { x: 2470, y: 270, w: 36, h: 100 }
     };
 
-    say("Platform addizioni pronto. Vai avanti risolvendo le somme.");
+    say("Platform pronto. Vai avanti risolvendo somme e sottrazioni.");
     platformLoop();
 }
 
@@ -1917,17 +2161,23 @@ function platformLoop() {
 function updatePlatform() {
     const state = platformState;
     const player = state.player;
-    const speed = 4.2;
-    const jump = -13.5;
+    const jump = -12.8;
+    state.frame++;
 
-    player.vx = 0;
     if (!state.lockedGate && !state.won) {
-        if (platformKeys.ArrowLeft || platformKeys.KeyA) player.vx = -speed;
-        if (platformKeys.ArrowRight || platformKeys.KeyD) player.vx = speed;
-        if ((platformKeys.Space || platformKeys.ArrowUp || platformKeys.KeyW) && player.grounded) {
+        const left = platformKeys.ArrowLeft || platformKeys.KeyA;
+        const right = platformKeys.ArrowRight || platformKeys.KeyD;
+        if (left) player.vx -= state.acceleration;
+        if (right) player.vx += state.acceleration;
+        if (!left && !right) player.vx *= state.friction;
+        player.vx = Math.max(-state.maxSpeed, Math.min(state.maxSpeed, player.vx));
+        if ((platformKeys.Space || platformKeys.ArrowUp || platformKeys.KeyW) && (player.grounded || state.frame - player.lastGrounded < 8)) {
             player.vy = jump;
             player.grounded = false;
+            player.lastGrounded = -99;
         }
+    } else {
+        player.vx *= 0.78;
     }
 
     player.vy += state.gravity;
@@ -1940,6 +2190,7 @@ function updatePlatform() {
             player.y = platform.y - player.h;
             player.vy = 0;
             player.grounded = true;
+            player.lastGrounded = state.frame;
         }
     });
 
@@ -1975,7 +2226,7 @@ function updatePlatform() {
         say("Riproviamo dal punto di partenza.");
     }
 
-    state.cameraX = Math.max(0, Math.min(player.x - 210, 1160));
+    state.cameraX += (Math.max(0, Math.min(player.x - 230, 1660)) - state.cameraX) * 0.12;
 }
 
 function drawPlatform() {
@@ -1985,8 +2236,18 @@ function drawPlatform() {
     const cam = state.cameraX;
 
     ctx2d.clearRect(0, 0, canvas2d.width, canvas2d.height);
-    ctx2d.fillStyle = "#bfe8ff";
+    const sky = ctx2d.createLinearGradient(0, 0, 0, canvas2d.height);
+    sky.addColorStop(0, "#bfe8ff");
+    sky.addColorStop(0.7, "#f7fcff");
+    sky.addColorStop(1, "#c7f0cf");
+    ctx2d.fillStyle = sky;
     ctx2d.fillRect(0, 0, canvas2d.width, canvas2d.height);
+    ctx2d.fillStyle = "rgba(97, 204, 157, 0.22)";
+    for (let i = 0; i < 5; i++) {
+        ctx2d.beginPath();
+        ctx2d.arc(120 + i * 260 - cam * 0.18, 386, 92 + (i % 2) * 28, Math.PI, 0);
+        ctx2d.fill();
+    }
     ctx2d.fillStyle = "rgba(255,255,255,0.72)";
     for (let i = 0; i < 8; i++) drawCloud(ctx2d, 120 + i * 210 - cam * 0.35, 66 + (i % 3) * 28);
 
@@ -1995,16 +2256,23 @@ function drawPlatform() {
         roundRect(ctx2d, platform.x - cam, platform.y, platform.w, platform.h, 12, true);
         ctx2d.fillStyle = "#2d9b78";
         ctx2d.fillRect(platform.x - cam, platform.y + 12, platform.w, 8);
+        ctx2d.fillStyle = "rgba(255,255,255,0.45)";
+        for (let dot = 18; dot < platform.w; dot += 42) {
+            ctx2d.beginPath();
+            ctx2d.arc(platform.x - cam + dot, platform.y + 23, 4, 0, Math.PI * 2);
+            ctx2d.fill();
+        }
     });
 
     state.coins.forEach(coin => {
         if (coin.taken) return;
+        const bob = Math.sin((state.frame + coin.x) * 0.08) * 4;
         ctx2d.fillStyle = "#ffc84a";
         ctx2d.beginPath();
-        ctx2d.arc(coin.x - cam, coin.y, 15, 0, Math.PI * 2);
+        ctx2d.arc(coin.x - cam, coin.y + bob, 15, 0, Math.PI * 2);
         ctx2d.fill();
         ctx2d.fillStyle = "#fff8c9";
-        ctx2d.fillRect(coin.x - cam - 3, coin.y - 9, 6, 18);
+        ctx2d.fillRect(coin.x - cam - 3, coin.y + bob - 9, 6, 18);
     });
 
     state.gates.forEach(gate => {
@@ -2013,7 +2281,9 @@ function drawPlatform() {
         roundRect(ctx2d, gate.x - cam, gate.y, gate.w, gate.h, 10, true);
         ctx2d.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--bot-accent").trim() || "#4aa6f2";
         ctx2d.font = "bold 18px Arial";
-        ctx2d.fillText(`${gate.a}+${gate.b}`, gate.x - cam + 4, gate.y + 39);
+        ctx2d.fillText(`${gate.a}${gate.op}${gate.b}`, gate.x - cam + 4, gate.y + 39);
+        ctx2d.fillStyle = "rgba(255,255,255,0.72)";
+        ctx2d.fillRect(gate.x - cam + 9, gate.y + gate.h - 18, gate.w - 18, 6);
     });
 
     ctx2d.fillStyle = "#ff668c";
@@ -2032,15 +2302,25 @@ function drawPlatform() {
 function drawPlatformPlayer(ctx2d, x, y, w, h) {
     const color = getComputedStyle(document.documentElement).getPropertyValue("--bot-accent").trim() || "#4aa6f2";
     ctx2d.fillStyle = color;
-    roundRect(ctx2d, x + 5, y + 20, w - 10, h - 12, 10, true);
+    roundRect(ctx2d, x + 5, y + 23, w - 10, h - 12, 12, true);
     ctx2d.fillStyle = "#ffffff";
-    roundRect(ctx2d, x, y, w, 30, 12, true);
+    roundRect(ctx2d, x - 2, y, w + 4, 32, 14, true);
     ctx2d.fillStyle = "#07131d";
-    roundRect(ctx2d, x + 5, y + 7, w - 10, 17, 8, true);
+    roundRect(ctx2d, x + 4, y + 7, w - 8, 19, 9, true);
     ctx2d.fillStyle = color;
     ctx2d.beginPath();
-    ctx2d.arc(x + 13, y + 15, 3, 0, Math.PI * 2);
-    ctx2d.arc(x + 22, y + 15, 3, 0, Math.PI * 2);
+    ctx2d.arc(x + 13, y + 15, 3.4, 0, Math.PI * 2);
+    ctx2d.arc(x + 23, y + 15, 3.4, 0, Math.PI * 2);
+    ctx2d.fill();
+    ctx2d.strokeStyle = color;
+    ctx2d.lineWidth = 2;
+    ctx2d.beginPath();
+    ctx2d.arc(x + 18, y + 16, 7, 0.25, Math.PI - 0.25);
+    ctx2d.stroke();
+    ctx2d.fillStyle = "rgba(255,255,255,0.85)";
+    ctx2d.beginPath();
+    ctx2d.arc(x + 14, y + 14, 1.1, 0, Math.PI * 2);
+    ctx2d.arc(x + 24, y + 14, 1.1, 0, Math.PI * 2);
     ctx2d.fill();
 }
 
@@ -2067,11 +2347,11 @@ function openPlatformQuestion(gate) {
     if (state.lockedGate === gate) return;
     state.lockedGate = gate;
     state.questionBox.classList.add("active");
-    state.questionText.textContent = `${gate.a} + ${gate.b} = ?`;
+    state.questionText.textContent = `${gate.a} ${gate.op} ${gate.b} = ?`;
     state.answerInput.value = "";
     state.answerInput.focus();
-    updateAssist(`Porta chiusa. Risolvi: ${gate.a} più ${gate.b}.`, "➕", childProfile.supportBlind);
-    say(`Quanto fa ${gate.a} più ${gate.b}?`);
+    updateAssist(`Porta chiusa. Risolvi: ${platformQuestionText(gate)}.`, "➕", childProfile.supportBlind);
+    say(`Quanto fa ${platformQuestionText(gate)}?`);
 }
 
 function submitPlatformAnswer() {
@@ -2079,7 +2359,7 @@ function submitPlatformAnswer() {
     if (!state || !state.lockedGate) return;
     const answer = Number(state.answerInput.value);
     const gate = state.lockedGate;
-    if (answer === gate.a + gate.b) {
+    if (answer === platformAnswer(gate)) {
         gate.open = true;
         state.lockedGate = null;
         state.questionBox.classList.remove("active");
@@ -2093,6 +2373,14 @@ function submitPlatformAnswer() {
         state.answerInput.value = "";
         state.answerInput.focus();
     }
+}
+
+function platformAnswer(gate) {
+    return gate.op === "-" ? gate.a - gate.b : gate.a + gate.b;
+}
+
+function platformQuestionText(gate) {
+    return gate.op === "-" ? `${gate.a} meno ${gate.b}` : `${gate.a} più ${gate.b}`;
 }
 
 function rectsOverlap(a, b) {
@@ -2306,7 +2594,7 @@ async function askAtchiiBackend(rawText) {
 
 function actionFromAssistantText(rawText) {
     const text = rawText.toLowerCase();
-    if (text.includes("platform") || text.includes("mario") || text.includes("addizion") || text.includes("somma")) {
+    if (text.includes("platform") || text.includes("mario") || text.includes("addizion") || text.includes("sottrazion") || text.includes("somma")) {
         return () => { showPage("games"); setGame("platform"); };
     }
     if (text.includes("gioco") || text.includes("giocare")) return () => showPage("games");
@@ -2334,8 +2622,8 @@ function localAssistantReply(rawText) {
     if (text.includes("python") || text.includes("html") || text.includes("javascript") || text.includes("unity")) {
         return { text: "Ho incluso nel sito anche un prototipo di platform con addizioni, ispirato a un gioco Unity educativo.", action: () => { showPage("games"); setGame("platform"); } };
     }
-    if (text.includes("mario") || text.includes("platform") || text.includes("addizion") || text.includes("somma")) {
-        return { text: "Apro il platform con addizioni. Per andare avanti devi risolvere le somme.", action: () => { showPage("games"); setGame("platform"); } };
+    if (text.includes("mario") || text.includes("platform") || text.includes("addizion") || text.includes("sottrazion") || text.includes("somma")) {
+        return { text: "Apro il platform con somme e sottrazioni. Per andare avanti devi risolvere le operazioni.", action: () => { showPage("games"); setGame("platform"); } };
     }
     if (text.includes("gioco") || text.includes("giocare")) {
         return { text: "Certo. Apro i giochi e preparo un'attivita semplice.", action: () => showPage("games") };
